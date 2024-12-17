@@ -19,32 +19,30 @@ public class Team
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public int getScore() {
 		return score;
 	}
 
 	public void setScore(int score) throws Exception {
 		if(score >= 0) this.score = score;
-		else throw new Exception("Se ha intentado poner un score negativo");
+		else throw new Exception("variable score in Team " + name + "cannot be set to a negative value.");
 	}
 
 	public int getGoalsFor() {
 		return goalsFor;
 	}
 
-	public void setGoalsFor(int goalsFor) {
-		this.goalsFor = goalsFor;
+	public void setGoalsFor(int goalsFor) throws Exception {
+		if(goalsFor >= 0) this.goalsFor = goalsFor;
+		else throw new Exception("variable goalsFor in Team " + name + "cannot be set to a negative value.");
 	}
 
 	public int getGoalsAgainst() {
 		return goalsAgainst;
 	}
 
-	public void setGoalsAgainst(int goalsAgainst) {
-		this.goalsAgainst = goalsAgainst;
+	public void setGoalsAgainst(int goalsAgainst) throws Exception {
+		if(goalsAgainst >= 0)this.goalsAgainst = goalsAgainst;
+		else throw new Exception("variable goalsAgainst in Team " + name + "cannot be set to a negative value.");
 	}
 }

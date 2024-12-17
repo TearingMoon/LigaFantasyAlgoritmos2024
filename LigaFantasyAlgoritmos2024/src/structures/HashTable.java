@@ -113,7 +113,7 @@ public class HashTable<T>
 		numOfElements++;
 		numOfRegisteredElements++;
 		loadFactor = (double) numOfElements/size;
-		if(loadFactor >= 0.8) System.out.println("\n#### THE LOAD FACTOR IS OVER 80%, consider increasing table size or using table.rehash().");
+		if(loadFactor >= 0.8) rehash();
 	}
 	
 	public T get(String key)
@@ -189,7 +189,31 @@ public class HashTable<T>
 		size = newSize;
 		table = newTable;
 		loadFactor = (double) numOfElements/size;
-		System.out.println("\n#### New load factor: " + loadFactor);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void rehash(int size)
+	{
+		int newSize = nextPrime((int) (size/0.8));
+		Entry<T> newTable[] = new Entry[newSize];
+		
+		for(int i = 0; i < newSize; i++)
+		{
+			newTable[i] = null;
+		}
+		
+		for(Entry<T> e : table)
+		{
+			if(e != null)
+			{
+				int index = hash(e.key, newSize, newTable);
+				newTable[index] = e;
+			}
+		}
+		
+		this.size = newSize;
+		table = newTable;
+		loadFactor = (double) numOfElements/this.size;
 	}
 	
 	private int nextPrime(int n) {
