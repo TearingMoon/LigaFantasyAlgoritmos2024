@@ -25,6 +25,11 @@ public class Team {
 		if(score >= 0) this.score = score;
 		else throw new Exception("variable score in Team " + name + "cannot be set to a negative value.");
 	}
+	
+	public void addScore(int amount) throws Exception {
+		if(amount >= 0) score += amount;
+		else throw new Exception("Cannot substract points from Team" + name + ".");
+	}
 
 	public int getGoalsFor() {
 		return goalsFor;
@@ -34,6 +39,11 @@ public class Team {
 		if(goalsFor >= 0) this.goalsFor = goalsFor;
 		else throw new Exception("variable goalsFor in Team " + name + "cannot be set to a negative value.");
 	}
+	
+	public void addGoalsFor(int amount) throws Exception {
+		if(amount >= 0) goalsFor += amount;
+		else throw new Exception("Cannot substract goalsFor from Team" + name + ".");
+	}
 
 	public int getGoalsAgainst() {
 		return goalsAgainst;
@@ -42,5 +52,10 @@ public class Team {
 	public void setGoalsAgainst(int goalsAgainst) throws Exception {
 		if(goalsAgainst >= 0)this.goalsAgainst = goalsAgainst;
 		else throw new Exception("variable goalsAgainst in Team " + name + "cannot be set to a negative value.");
+	}
+	
+	public void addGoalsAgainst(int amount) throws Exception {
+		if(amount >= 0) goalsAgainst += amount;
+		else throw new Exception("Cannot substract goalsAgainst from Team" + name + ".");
 	}
 }
