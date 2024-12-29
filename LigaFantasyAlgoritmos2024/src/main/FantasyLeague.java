@@ -34,8 +34,29 @@ public class FantasyLeague {
 		if(!teams.contains(identifier)) return;
 		else 
 		{
-			points = InputManager.GetInt("Cuantos puntos quieres añadir? (0, 1 o 3): ", sc, integer -> integer==3 || integer==0 || integer==1);
+			points = InputManager.GetInt("¿Cuantos puntos quieres añadir? (0, 1 o 3): ", sc, integer -> integer==3 || integer==0 || integer==1);
 			try { teams.get(identifier).addScore(points); } catch (Exception e) { e.printStackTrace(); }
 		}
 	}
+	
+	public void addGoalsInFavor(String identifier) {
+		int goals;
+		if(!teams.contains(identifier)) return;
+		else {
+			
+			goals = InputManager.GetInt("¿Cuantos goles quieres añadir a favor? (0-7): ", sc, integer -> integer>=0 && integer <=7);
+			try {teams.get(identifier).addGoalsFor(goals); } catch (Exception e) { e.printStackTrace();}
+		}
+	}
+	public void addGoalsAgainst(String identifier) {
+		int goals;
+		if(!teams.contains(identifier)) return;
+		else {
+			
+			goals = InputManager.GetInt("¿Cuantos goles quieres añadir en contra? (0-7): ", sc, integer -> integer>=0 && integer <=7);
+			try {teams.get(identifier).addGoalsFor(goals); } catch (Exception e) { e.printStackTrace();}
+		}
+	}
+	
+	
 }
