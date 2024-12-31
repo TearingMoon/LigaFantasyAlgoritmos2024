@@ -12,10 +12,13 @@ public class InputManager {
 			System.out.println((i + 1) + ". " + options[i]);
 		System.out.println("\n");
 		int returnInt = 0;
-		do
+		do {
 			returnInt = input.nextInt();
+			input.nextLine();
+		}	
 		while (returnInt < 1 || returnInt > options.length);
 		System.out.println("\n");
+		
 		return returnInt;
 	}
 
@@ -44,5 +47,11 @@ public class InputManager {
 		while (!condition.test(returnVal));
 		System.out.println("\n");
 		return returnVal;
+	}
+
+	public static String GetString(String message) {
+		System.out.println(message);
+		System.out.println("\n");
+		return input.nextLine().trim();
 	}
 }

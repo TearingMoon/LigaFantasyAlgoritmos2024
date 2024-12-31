@@ -1,8 +1,8 @@
 package main;
 
 import java.util.function.Consumer;
-
 import utilities.InputManager;
+import entities.Team;
 
 public class Main {
 
@@ -44,41 +44,38 @@ public class Main {
 	}
 
 	public static void addTeamPrompt() {
-		//TODO: Implement interface
-		
-		//Prompt name
-		
-		//Check if exists
-		
-		//Add if it doesnt exist
+		// TODO: Check if it works correctly
+		String name = InputManager.GetString("Introduce el nombre del equipo:");
+		Team newTeam = new Team(name, 0, 0, 0);
+		league.addTeam(newTeam);
 	}
 
 	public static void addPointsPrompt() {
-		//TODO: Implement interface
-		
-		//Select team
-		
-		//Select point ammount
+		// TODO: Implement interface
+
+		// Select team
+
+		// Select point ammount
 	}
 
 	public static void addGoalsInFavorPrompt() {
-		//TODO: Implement interface
-		
-		//Select team;
-		
-		//Select goal ammount;
+		// TODO: Implement interface
+
+		// Select team;
+
+		// Select goal ammount;
 	}
 
 	public static void addGoalsAgainstPrompt() {
-		//TODO: Implement interface
-		
-		//Select team
-		
-		//Select goal ammount
+		// TODO: Implement interface
+
+		// Select team
+
+		// Select goal ammount
 	}
 
 	public static void showPuntuation() {
-		//TODO: Implement interface
+		// TODO: Implement interface
 	}
 
 	/**
