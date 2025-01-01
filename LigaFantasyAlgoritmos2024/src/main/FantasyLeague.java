@@ -17,7 +17,7 @@ public class FantasyLeague {
 
 	public void addTeam(Team... teams) {
 		for (Team team : teams) {
-			this.teams.insert(team.getName(), team);
+			this.teams.insert(team.getName(), team); // Sets the name as the key
 			numberOfTeams++;
 		}
 	}
@@ -57,7 +57,12 @@ public class FantasyLeague {
 			}
 		}
 	}
-	
-	public void getPuntuations() {}
-	
+
+	public void getPuntuations() {
+		//TODO: implement method
+	}
+
+	public boolean teamExists(String identifier) {
+		return teams.contains(identifier);
+	}
 }

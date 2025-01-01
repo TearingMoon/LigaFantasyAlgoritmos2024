@@ -1,6 +1,8 @@
 package main;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 import utilities.InputManager;
 import entities.Team;
 
@@ -46,36 +48,60 @@ public class Main {
 	public static void addTeamPrompt() {
 		// TODO: Check if it works correctly
 		String name = InputManager.GetString("Introduce el nombre del equipo:");
+		if (league.teamExists(name)) {
+			System.out.println(name + " ya existe y no ha sido creado.");
+			return;
+		}
+		;
 		Team newTeam = new Team(name, 0, 0, 0);
 		league.addTeam(newTeam);
 	}
 
 	public static void addPointsPrompt() {
-		// TODO: Implement interface
-
+		// TODO: Check if it works correctly
 		// Select team
-
+		String name = InputManager.GetString("Introduce el nombre del equipo:");
+		if (!league.teamExists(name)) {
+			System.out.println(name + " no existe.");
+			return;
+		}
 		// Select point ammount
+		Predicate<Integer> pointLimit = i -> (i >= 0 && i <= 3);
+		int points = InputManager.GetInt("Introduce los puntos a añadir: (0-3)", pointLimit);
+		league.addPoints(name, points);
 	}
 
 	public static void addGoalsInFavorPrompt() {
-		// TODO: Implement interface
-
-		// Select team;
-
-		// Select goal ammount;
+		// TODO: Check if it works correctly
+		// Select team
+		String name = InputManager.GetString("Introduce el nombre del equipo:");
+		if (!league.teamExists(name)) {
+			System.out.println(name + " no existe.");
+			return;
+		}
+		// Select point ammount
+		Predicate<Integer> goalLimit = i -> (i >= 0 && i <= 7);
+		int goals = InputManager.GetInt("Introduce los goles a favor: (0-7)", goalLimit);
+		league.addGoalsInFavor(name, goals);
 	}
 
 	public static void addGoalsAgainstPrompt() {
-		// TODO: Implement interface
-
+		// TODO: Check if it works correctly
 		// Select team
-
-		// Select goal ammount
+		String name = InputManager.GetString("Introduce el nombre del equipo:");
+		if (!league.teamExists(name)) {
+			System.out.println(name + " no existe.");
+			return;
+		}
+		// Select point ammount
+		Predicate<Integer> goalLimit = i -> (i >= 0 && i <= 7);
+		int goals = InputManager.GetInt("Introduce los goles en contra: (0-7)", goalLimit);
+		league.addGoalsAgainst(name, goals);
 	}
 
 	public static void showPuntuation() {
 		// TODO: Implement interface
+		league.getPuntuations();
 	}
 
 	/**
