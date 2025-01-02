@@ -11,7 +11,7 @@ public class FantasyLeague {
 
 	public FantasyLeague(int InitialNumberOfTeams) {
 		numberOfTeams = 0;
-		teams = new HashTable<Team>(0, exploration.LINEAL);
+		teams = new HashTable<Team>(exploration.LINEAL);
 		teams.rehash(InitialNumberOfTeams);
 	}
 

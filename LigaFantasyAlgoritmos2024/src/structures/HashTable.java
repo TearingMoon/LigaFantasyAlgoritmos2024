@@ -47,9 +47,9 @@ public class HashTable<T>
 	private exploration explorationMethod;
 	
 	@SuppressWarnings("unchecked")
-	public HashTable(int size, exploration explorationMethod)
+	public HashTable(exploration explorationMethod)
 	{
-		this.size = size;
+		this.size = 0;
 		this.table = new Entry[size];
 		
 		for(int i = 0; i<size; i++)
@@ -107,7 +107,7 @@ public class HashTable<T>
 	
 	public void insert(String key, T value)
 	{
-		if(numOfElements >= size) return;
+		if (numOfElements+1 > size) rehash(numOfElements+1);
 		int index = hash(key, size, table);
 		table[index] = new Entry<T>(key, value);
 		numOfElements++;
@@ -123,7 +123,7 @@ public class HashTable<T>
 		if(table[index] != null)
 		{
 			if(!table[index].getRegistered()) return null;
-			table[index].getValue();
+			else return table[index].getValue();
 		}
 		return null;
 	}
@@ -164,6 +164,16 @@ public class HashTable<T>
 			if(e != null && e.getValue().equals(value)) return e.getKey();
 		}
 		return "";
+	}
+	
+	public DoubleLinkedCircularList<T> toList()
+	{
+		DoubleLinkedCircularList<T> returnList = new DoubleLinkedCircularList<T>();
+		for(Entry<T> e : table)
+		{
+			if (e.isRegistered) returnList.Insert(e.value);
+		}
+		return returnList;
 	}
 	
 	@SuppressWarnings("unchecked")
