@@ -64,8 +64,7 @@ public class HashTable<T>
 	
 	private int hash(String key, int mod, Entry<T>[] table)
 	{
-		long hashed = transformString(key);
-		int index = (int) hashed%mod;
+		int index = Math.abs(key.hashCode()) % mod;
 		
 		switch(explorationMethod)
 		{
@@ -91,11 +90,6 @@ public class HashTable<T>
 		}
 		
 		return index;
-	}
-	
-	private long transformString(String key) 
-	{
-		return key.hashCode();
 	}
 	
 	public void insert(String key, T value)

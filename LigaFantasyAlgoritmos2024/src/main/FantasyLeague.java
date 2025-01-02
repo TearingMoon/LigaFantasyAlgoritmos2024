@@ -1,5 +1,6 @@
 package main;
 
+import structures.DoubleLinkedCircularList;
 import structures.HashTable;
 import structures.HashTable.exploration;
 import entities.Team;
@@ -64,17 +65,17 @@ public class FantasyLeague {
 		{
 			System.out.println(t);
 		}
-		Team[] promotions = new Team[3];
-		Team[] relegations = new Team[3];
+		DoubleLinkedCircularList<String> promotions = new DoubleLinkedCircularList<String>();
+		DoubleLinkedCircularList<String> relegations = new DoubleLinkedCircularList<String>();
 		
-		for(int i = 0, j = 0; i < teams.toList().GetSize(); i++)
+		for(int i = 0; i < teams.toList().GetSize(); i++)
 		{
-			if(i < 3) promotions[i] = teams.toList().ToArray(new Team[0])[i];
-			if(i >= teams.toList().GetSize() - 3) { relegations[j] = teams.toList().ToArray(new Team[0])[i]; j++; }
+			if(i < 3) promotions.Insert(teams.toList().ToArray(new Team[0])[i].getName());
+			if(i >= teams.toList().GetSize() - 3) relegations.Insert(teams.toList().ToArray(new Team[0])[i].getName());
 		}
 		
-		System.out.println("\nAscensos:" + promotions[1].getName() + ", " + promotions[2] + ", " + promotions[3]);
-		System.out.println("\nDescensos:" + relegations[1].getName() + ", " + relegations[2] + ", " + relegations[3]);
+		System.out.println("\nAscensos: " + String.join(", ", promotions));
+		System.out.println("\nDescensos: " + String.join(", ", relegations));
 	}
 
 	public boolean teamExists(String identifier) {
