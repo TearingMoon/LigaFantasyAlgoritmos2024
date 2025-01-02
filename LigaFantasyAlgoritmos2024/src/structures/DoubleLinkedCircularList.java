@@ -334,8 +334,37 @@ public class DoubleLinkedCircularList<T> implements Iterable<T>
 	{
 		DoubleLinkedCircularList<T> returnList = new DoubleLinkedCircularList<T>();
 		
+		for(T item : this)
+		{
+			if(condition.test(item)) returnList.Insert(item);
+		}
 		
 		return returnList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public T[] ToArray(T[] a)
+	{
+		a = (T[])java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), listCount);
+		
+		int i = 0;
+		for(T item : this)
+		{
+			a[i] = item;
+			i++;
+		}
+		
+		return a;
+	}
+	
+	public T[] Sort(T[] a)
+	{
+		a = this.ToArray(a);
+		
+		if (a.length > 0 && a[0] instanceof Comparable) MergeSort.mergeSort((Comparable[]) a);
+		else return null;
+		
+		return a;
 	}
 	
 	public Iterator<T> iterator()
