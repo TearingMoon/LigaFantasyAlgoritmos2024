@@ -63,13 +63,24 @@ public class Team {
 	
 	public String toString()
 	{
-		String s = "";
-		
-		s += "Nombre: " + name + "\n";
-		s += "Score: " + score + "\n";
-		s += "Goles a favor: " + goalsFor + "\n";
-		s += "Goles en contra: " + goalsAgainst + "\n";
-		
+		String s = name + "\t" + score + "\t" + (goalsFor - goalsAgainst);
 		return s;
+	}
+	
+	public int compareTo(Team other)
+	{
+		if(this.score>other.score) return 1;
+		else if(this.score<other.score) return -1;
+		else
+		{
+			if((this.goalsFor-this.goalsAgainst)>(other.goalsFor-other.goalsAgainst)) return 1;
+			else if((this.goalsFor-this.goalsAgainst)<(other.goalsFor-other.goalsAgainst)) return -1;
+			else
+			{
+				if(this.goalsFor > other.goalsFor) return 1;
+				else if(this.goalsFor < other.goalsFor) return -1;
+				else return 0;
+			}
+		}
 	}
 }

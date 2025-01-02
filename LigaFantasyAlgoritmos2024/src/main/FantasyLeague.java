@@ -59,10 +59,22 @@ public class FantasyLeague {
 	}
 
 	public void getPuntuations() {
-		for(Team t : teams.toList())
+		System.out.println("Nombre\tPuntuacion\tDiferencia de goles\n");
+		for(Team t : teams.toList().Sort(new Team[0]))
 		{
-			System.out.println(t.toString() + "\n\n");
+			System.out.println(t);
 		}
+		Team[] promotions = new Team[3];
+		Team[] relegations = new Team[3];
+		
+		for(int i = 0, j = 0; i < teams.toList().GetSize(); i++)
+		{
+			if(i < 3) promotions[i] = teams.toList().ToArray(new Team[0])[i];
+			if(i >= teams.toList().GetSize() - 3) { relegations[j] = teams.toList().ToArray(new Team[0])[i]; j++; }
+		}
+		
+		System.out.println("\nAscensos:" + promotions[1].getName() + ", " + promotions[2] + ", " + promotions[3]);
+		System.out.println("\nDescensos:" + relegations[1].getName() + ", " + relegations[2] + ", " + relegations[3]);
 	}
 
 	public boolean teamExists(String identifier) {

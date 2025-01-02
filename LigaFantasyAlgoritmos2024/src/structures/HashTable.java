@@ -49,7 +49,7 @@ public class HashTable<T>
 	@SuppressWarnings("unchecked")
 	public HashTable(exploration explorationMethod)
 	{
-		this.size = 0;
+		this.size = 1;
 		this.table = new Entry[size];
 		
 		for(int i = 0; i<size; i++)
@@ -95,19 +95,11 @@ public class HashTable<T>
 	
 	private long transformString(String key) 
 	{
-		long d=0;
-		
-		for(int i=0;i<Math.min(10, key.length());i++)
-		{
-			d=d*29+(int)key.charAt(i);
-		}
-		
-		return Math.abs(d);
+		return key.hashCode();
 	}
 	
 	public void insert(String key, T value)
 	{
-		if (numOfElements+1 > size) rehash(numOfElements+1);
 		int index = hash(key, size, table);
 		table[index] = new Entry<T>(key, value);
 		numOfElements++;
