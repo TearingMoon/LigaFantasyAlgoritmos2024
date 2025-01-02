@@ -357,14 +357,24 @@ public class DoubleLinkedCircularList<T> implements Iterable<T>
 		return a;
 	}
 	
-	public T[] Sort(T[] a)
+	@SuppressWarnings({ "unchecked"})
+	public <E extends Comparable<E>> E[] Sort(E[] a)
 	{
-		a = this.ToArray(a);
+		a = (E[])java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), listCount);
 		
-		if (a.length > 0 && a[0] instanceof Comparable) MergeSort.mergeSort((Comparable[]) a);
+		int i = 0;
+		for(T item : this)
+		{
+			a[i] = (E) item;
+			i++;
+		}
+		
+		E[] sorted;
+		
+		if (a.length > 0 && a[0] instanceof Comparable) sorted = MergeSort.mergeSort(a);
 		else return null;
 		
-		return a;
+		return sorted;
 	}
 	
 	public Iterator<T> iterator()

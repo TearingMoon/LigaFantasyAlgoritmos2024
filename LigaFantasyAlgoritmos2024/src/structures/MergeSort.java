@@ -4,13 +4,14 @@ public class MergeSort {
 
 	
 
-	public static void mergeSort( Comparable [ ] a ) {
-        Comparable [ ] tmpArray = new Comparable[ a.length ];
+	public static <T extends Comparable<T>> T[] mergeSort(T[] a) {
+        T [ ] tmpArray = a;
         mergeSort( a, tmpArray, 0, a.length - 1 );
+        return tmpArray;
     }
     
     
-    private static void mergeSort( Comparable [ ] a, Comparable [ ] tmpArray,
+    private static <T extends Comparable<T>> void mergeSort( T [ ] a, T [ ] tmpArray,
             int left, int right ) {
         if( left < right ) {
             int center = ( left + right ) / 2;
@@ -28,7 +29,7 @@ public class MergeSort {
      * @param rightPos the index of the start of the second half.
      * @param rightEnd the right-most index of the subarray.
      */
-    private static void merge( Comparable [ ] a, Comparable [ ] tmpArray,
+    private static <T extends Comparable<T>> void merge( T [ ] a, T [ ] tmpArray,
             int leftPos, int rightPos, int rightEnd ) {
         int leftEnd = rightPos - 1;
         int tmpPos = leftPos;

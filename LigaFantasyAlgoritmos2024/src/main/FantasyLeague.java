@@ -57,11 +57,11 @@ public class FantasyLeague {
 				e.printStackTrace();
 			}
 		}
-	}
+	}	
 
 	public void getPuntuations() {
 		System.out.println("Nombre\tPuntuacion\tDiferencia de goles\n");
-		for(Team t : teams.toList().Sort(new Team[0]))
+		for(Team t : (teams.toList().Sort(new Team[0])))
 		{
 			System.out.println(t);
 		}
