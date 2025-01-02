@@ -58,4 +58,18 @@ public class Team {
 		if(amount >= 0) goalsAgainst += amount;
 		else throw new Exception("Cannot substract goalsAgainst from Team" + name + ".");
 	}
+	
+	@Override
+	
+	public String toString()
+	{
+		String s = "";
+		
+		s += "Nombre: " + name + "\n";
+		s += "Score: " + score + "\n";
+		s += "Goles a favor: " + goalsFor + "\n";
+		s += "Goles en contra: " + goalsAgainst + "\n";
+		
+		return s;
+	}
 }

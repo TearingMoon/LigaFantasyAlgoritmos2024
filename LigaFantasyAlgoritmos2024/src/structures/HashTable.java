@@ -171,7 +171,7 @@ public class HashTable<T>
 		DoubleLinkedCircularList<T> returnList = new DoubleLinkedCircularList<T>();
 		for(Entry<T> e : table)
 		{
-			if (e.isRegistered) returnList.Insert(e.value);
+			if (e != null && e.isRegistered) returnList.Insert(e.value);
 		}
 		return returnList;
 	}

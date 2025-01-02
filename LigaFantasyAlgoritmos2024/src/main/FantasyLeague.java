@@ -59,7 +59,10 @@ public class FantasyLeague {
 	}
 
 	public void getPuntuations() {
-		//TODO: implement method
+		for(Team t : teams.toList())
+		{
+			System.out.println(t.toString() + "\n\n");
+		}
 	}
 
 	public boolean teamExists(String identifier) {

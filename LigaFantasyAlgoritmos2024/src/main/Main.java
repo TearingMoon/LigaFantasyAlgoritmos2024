@@ -100,7 +100,6 @@ public class Main {
 	}
 
 	public static void showPuntuation() {
-		// TODO: Implement interface
 		league.getPuntuations();
 	}
 
