@@ -1,6 +1,6 @@
 package entities;
 
-public class Team implements Comparable{
+public class Team{
 	String name;
 	int score;
 	int goalsFor;
@@ -67,12 +67,8 @@ public class Team implements Comparable{
 		return s;
 	}
 	
-	public int compareTo(Object o)
-	{
-		Team other;
-		if(Object.class.getTypeName() != "Team") return 0;
-		else other = (Team) o;
-		
+	public int compareTo(Team other)
+	{		
 		if(this.score>other.getScore()) return 1;
 		else if(this.score<other.getScore()) return -1;
 		else

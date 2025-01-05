@@ -3,6 +3,7 @@ package main;
 import structures.DoubleLinkedCircularList;
 import structures.HashTable;
 import structures.HashTable.exploration;
+import structures.MergeSort;
 import entities.Team;
 
 public class FantasyLeague {
@@ -60,8 +61,11 @@ public class FantasyLeague {
 	}	
 
 	public void getPuntuations() {
+		Comparable<Team> [] sortedTeams = (Comparable<Team>[]) teams.toList().ToArray(new Team[0]);
+		MergeSort.mergeSort(sortedTeams);
+		
 		System.out.println("Nombre\tPuntuacion\tDiferencia de goles\n");
-		for(Team t : (teams.toList().Sort(new Team[0])))
+		for(Comparable<Team> t : sortedTeams)
 		{
 			System.out.println(t);
 		}
