@@ -1,6 +1,6 @@
 package entities;
 
-public class Team {
+public class Team{
 	String name;
 	int score;
 	int goalsFor;
@@ -57,5 +57,30 @@ public class Team {
 	public void addGoalsAgainst(int amount) throws Exception {
 		if(amount >= 0) goalsAgainst += amount;
 		else throw new Exception("Cannot substract goalsAgainst from Team" + name + ".");
+	}
+	
+	@Override
+	
+	public String toString()
+	{
+		String s = name + "\t" + score + "\t" + (goalsFor - goalsAgainst);
+		return s;
+	}
+	
+	public int compareTo(Team other)
+	{		
+		if(this.score>other.getScore()) return 1;
+		else if(this.score<other.getScore()) return -1;
+		else
+		{
+			if((this.getGoalsFor()-this.getGoalsAgainst())>(other.getGoalsFor()-other.getGoalsAgainst())) return 1;
+			else if((this.getGoalsFor()-this.getGoalsAgainst())<(other.getGoalsFor()-other.getGoalsAgainst())) return -1;
+			else
+			{
+				if(this.getGoalsFor() > other.getGoalsFor()) return 1;
+				else if(this.getGoalsFor() < other.getGoalsFor()) return -1;
+				else return 0;
+			}
+		}
 	}
 }

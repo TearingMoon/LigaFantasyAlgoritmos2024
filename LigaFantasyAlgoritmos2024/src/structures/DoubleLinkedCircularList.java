@@ -1,6 +1,7 @@
 package structures;
 
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 public class DoubleLinkedCircularList<T> implements Iterable<T> 
 {
@@ -317,6 +318,43 @@ public class DoubleLinkedCircularList<T> implements Iterable<T>
 		}
 		
 		return -1;
+	}
+	
+	public T Find(Predicate<T> condition)
+	{
+		for(T item : this)
+		{
+			if(condition.test(item)) return item;
+		}
+		
+		return null;
+	}
+	
+	public DoubleLinkedCircularList<T> FindAll(Predicate<T> condition)
+	{
+		DoubleLinkedCircularList<T> returnList = new DoubleLinkedCircularList<T>();
+		
+		for(T item : this)
+		{
+			if(condition.test(item)) returnList.Insert(item);
+		}
+		
+		return returnList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public T[] ToArray(T[] a)
+	{
+		a = (T[])java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), listCount);
+		
+		int i = 0;
+		for(T item : this)
+		{
+			a[i] = item;
+			i++;
+		}
+		
+		return a;
 	}
 	
 	public Iterator<T> iterator()

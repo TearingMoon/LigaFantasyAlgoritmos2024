@@ -66,8 +66,8 @@ public class Main {
 			return;
 		}
 		// Select point ammount
-		Predicate<Integer> pointLimit = i -> (i >= 0 && i <= 3);
-		int points = InputManager.GetInt("Introduce los puntos a añadir: (0-3)", pointLimit);
+		Predicate<Integer> pointLimit = i -> (i == 0 || i == 1 || i == 3);
+		int points = InputManager.GetInt("Introduce los puntos a añadir: (0, 1 o 3)", pointLimit);
 		league.addPoints(name, points);
 	}
 
@@ -100,7 +100,6 @@ public class Main {
 	}
 
 	public static void showPuntuation() {
-		// TODO: Implement interface
 		league.getPuntuations();
 	}
 
