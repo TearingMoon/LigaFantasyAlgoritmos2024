@@ -1,10 +1,12 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import entities.Team;
+import structures.DoubleLinkedCircularList;
 import structures.HashTable;
 import utilities.InputManager;
 
@@ -49,24 +51,23 @@ public class MainNormal {
 	}
 
 	public static void addPoints(String TeamName1, String TeamName2, int goalsTeam1, int goalsTeam2) {
-		if(goalsTeam1 < goalsTeam2) {
+		if (goalsTeam1 < goalsTeam2) {
 			league.addPoints(TeamName2, 3);
-		}else if(goalsTeam1 > goalsTeam2) {
+		} else if (goalsTeam1 > goalsTeam2) {
 			league.addPoints(TeamName1, 3);
-		}else if (goalsTeam1 == goalsTeam2) {
+		} else if (goalsTeam1 == goalsTeam2) {
 			league.addPoints(TeamName1, 1);
 			league.addPoints(TeamName2, 1);
 		}
-		
 	}
-	
+
 	public static void addGoals(String TeamName1, String TeamName2, int goalsTeam1, int goalsTeam2) {
 		league.addGoalsInFavor(TeamName1, goalsTeam1);
-		//league.addGoalsInFavor(TeamName2, goalsTeam2);
-		
+		league.addGoalsInFavor(TeamName2, goalsTeam2);
+
 		league.addGoalsAgainst(TeamName1, goalsTeam2);
-		//league.addGoalsAgainst(TeamName2, goalsTeam1);
-		
+		league.addGoalsAgainst(TeamName2, goalsTeam1);
+
 	}
 
 	public static int generateGoals() {
@@ -75,29 +76,22 @@ public class MainNormal {
 	}
 
 	public static void gameSimulation() {
-		HashTable<Team> auxTeams = league.getTeams();
-		for (int i = 0; i < league.getTeams().getSize(); i++) {
-			if (league.getTeams().getTable()[i] != null)
-				auxTeams.remove(auxTeams.keyOf(auxTeams.getTable()[i].getValue()));
-			for (int j = 0; j < auxTeams.getSize(); j++) {
-				if (league.getTeams().getTable()[i] != null && (auxTeams.getTable()[j] != null)) {
-					if (auxTeams.getTable()[j].getRegistered() != false) {
-						int goalsTeam1 = generateGoals();
-						int goalsTeam2 = generateGoals();
-						System.out.println(league.getTeams().getTable()[i].getValue().getName() + " " + goalsTeam1
-								+ " VS " + goalsTeam2 + " " + auxTeams.getTable()[j].getValue().getName());
-						//Goals
-						addGoals(league.getTeams().getTable()[i].getValue().getName(),
-								league.getTeams().get(auxTeams.getTable()[j].getValue().getName()).getName(),
-								goalsTeam1, goalsTeam2);
-						addPoints(league.getTeams().getTable()[i].getValue().getName(),
-								league.getTeams().get(auxTeams.getTable()[j].getValue().getName()).getName(),
-								goalsTeam1, goalsTeam2);
-					}
-				}
+		DoubleLinkedCircularList<Team> teams = league.getTeams().toList();
+		DoubleLinkedCircularList<Team> auxTeams = league.getTeams().toList();
 
+		for (int i = 0; i < teams.GetSize(); i++) {
+			auxTeams.Remove(teams.Get(i));
+			for (int j = 0; j < auxTeams.GetSize(); j++) {
+				int goalsTeam1 = generateGoals();
+				int goalsTeam2 = generateGoals();
+				System.out.println(teams.Get(i).getName() + " " + goalsTeam1 + " VS " + goalsTeam2 + " "
+						+ auxTeams.Get(j).getName());
+				// Goals
+				addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
+				// Points
+				addPoints(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
+				//ADD GET POINTS
 			}
-
 		}
 	}
 

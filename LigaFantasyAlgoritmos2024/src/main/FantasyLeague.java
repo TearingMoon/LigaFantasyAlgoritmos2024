@@ -53,7 +53,7 @@ public class FantasyLeague {
 			return;
 		else {
 			try {
-				teams.get(identifier).addGoalsFor(goals);
+				teams.get(identifier).addGoalsAgainst(goals);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -85,4 +85,11 @@ public class FantasyLeague {
 	public boolean teamExists(String identifier) {
 		return teams.contains(identifier);
 	}
+
+	public HashTable<Team> getTeams() {
+		return teams;
+	}
+
+	
+	
 }
