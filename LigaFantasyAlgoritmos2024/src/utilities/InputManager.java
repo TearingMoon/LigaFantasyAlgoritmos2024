@@ -10,14 +10,15 @@ public class InputManager {
 		System.out.println(message + "\n");
 		for (int i = 0; i < options.length; i++)
 			System.out.println((i + 1) + ". " + options[i]);
-		System.out.println("\n");
+		
+		System.out.println();
 		int returnInt = 0;
 		do {
 			returnInt = input.nextInt();
 			input.nextLine();
 		}	
 		while (returnInt < 1 || returnInt > options.length);
-		System.out.println("\n");
+		System.out.println();
 		
 		return returnInt;
 	}
@@ -27,11 +28,11 @@ public class InputManager {
 	{
 		int returnVal = 0;
 		System.out.println(message);
-		System.out.println("\n");
+		System.out.println();
 		do
 			returnVal = input.nextInt();
 		while (!condition.test(returnVal));
-		System.out.println("\n");
+		System.out.println();
 		return returnVal;
 	}
 
@@ -41,17 +42,19 @@ public class InputManager {
 	{
 		float returnVal = 0;
 		System.out.println(message);
-		System.out.println("\n");
+		System.out.println();
 		do
 			returnVal = input.nextInt();
 		while (!condition.test(returnVal));
-		System.out.println("\n");
+		System.out.println();
 		return returnVal;
 	}
 
 	public static String GetString(String message) {
 		System.out.println(message);
-		System.out.println("\n");
-		return input.nextLine().trim();
+		System.out.println();
+		String returnString = input.nextLine().trim();
+		System.out.println();
+		return returnString;
 	}
 }
