@@ -8,7 +8,7 @@ public class HashTable<T>
 		CUADRATIC
 	}
 	
-	private static class Entry<E>
+	public static class Entry<E>
 	{
 		private String key;
 		private E value;
@@ -46,6 +46,30 @@ public class HashTable<T>
 	private double loadFactor;
 	private exploration explorationMethod;
 	
+	public Entry<T>[] getTable() {
+		return table;
+	}
+	
+	public int getSize() {
+		return size;
+	}
+
+	public int getNumOfElements() {
+		return numOfElements;
+	}
+
+	public int getNumOfRegisteredElements() {
+		return numOfRegisteredElements;
+	}
+
+	public double getLoadFactor() {
+		return loadFactor;
+	}
+
+	public exploration getExplorationMethod() {
+		return explorationMethod;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public HashTable(exploration explorationMethod)
 	{
@@ -62,6 +86,15 @@ public class HashTable<T>
 		loadFactor = 0;
 	}
 	
+	public HashTable(Entry<T>[] table, int size, int numOfElements, int numOfRegisteredElements, double loadFactor, exploration explorationMethod) {
+		this.table = table;
+		this.size = size;
+		this.numOfElements = numOfElements;
+		this.numOfRegisteredElements = numOfRegisteredElements;
+		this.loadFactor = loadFactor;
+		this.explorationMethod = explorationMethod;
+	}
+
 	private int hash(String key, int mod, Entry<T>[] table)
 	{
 		int index = Math.abs(key.hashCode()) % mod;
@@ -162,6 +195,11 @@ public class HashTable<T>
 		return returnList;
 	}
 	
+	public HashTable<T> clone(HashTable<T> original)
+	{
+		return new HashTable<T>(original.getTable(), original.getSize(), original.getNumOfElements(), original.getNumOfRegisteredElements(), original.getLoadFactor(), original.getExplorationMethod());
+	}
+
 	@SuppressWarnings("unchecked")
 	public void rehash()
 	{
