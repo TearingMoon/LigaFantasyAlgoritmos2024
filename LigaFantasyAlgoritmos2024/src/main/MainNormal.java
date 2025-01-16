@@ -90,9 +90,9 @@ public class MainNormal {
 				addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
 				// Points
 				addPoints(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
-				//ADD GET POINTS
 			}
 		}
+		league.getPuntuations();
 	}
 
 	/**
