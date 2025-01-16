@@ -34,7 +34,7 @@ public class MergeSort {
         
         // Main loop
         while( leftPos <= leftEnd && rightPos <= rightEnd )
-            if(  a[ leftPos ].compareTo( (T) a[ rightPos ] ) <= 0 )
+            if(  a[ leftPos ].compareTo( (T) a[ rightPos ] ) >= 0 )
                 tmpArray[ tmpPos++ ] = a[ leftPos++ ];
             else
                 tmpArray[ tmpPos++ ] = a[ rightPos++ ];

@@ -102,15 +102,18 @@ public class MainNormal {
 	 * @param actions
 	 */
 	public static void handleMenu(String[] options, Consumer<Integer> actions) {
-		String[] optionsWithoutExit = new String[options.length];
+		// Adding exit option
+		String[] optionsWithExit = new String[options.length + 1];
+		optionsWithExit[options.length] = "Salir";
 		for (int i = 0; i < options.length; i++) {
-			optionsWithoutExit[i] = options[i];
+			optionsWithExit[i] = options[i];
 		}
+
 		// Enetering the loop
 		while (true) {
-			int selection = InputManager.MultipleOptions("Selecciona una opción:", optionsWithoutExit);
+			int selection = InputManager.MultipleOptions("Selecciona una opción:", optionsWithExit);
 			actions.accept(selection);
-			if (selection == optionsWithoutExit.length) {
+			if (selection == optionsWithExit.length) {
 				break;
 			}
 		}

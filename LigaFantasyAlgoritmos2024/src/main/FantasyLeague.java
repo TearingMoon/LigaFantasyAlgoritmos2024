@@ -4,6 +4,11 @@ import structures.DoubleLinkedCircularList;
 import structures.HashTable;
 import structures.HashTable.exploration;
 import structures.MergeSort;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import entities.Team;
 
 public class FantasyLeague {
@@ -63,6 +68,7 @@ public class FantasyLeague {
 	public void getPuntuations() {
 		Comparable<Team> [] sortedTeams = (Comparable<Team>[]) teams.toList().ToArray(new Team[0]);
 		MergeSort.mergeSort(sortedTeams);
+	
 		
 		System.out.println("Nombre\tPuntuacion\tDiferencia de goles\n");
 		for(Comparable<Team> t : sortedTeams)

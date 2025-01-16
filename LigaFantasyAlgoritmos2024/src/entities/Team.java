@@ -1,6 +1,6 @@
 package entities;
 
-public class Team{
+public class Team implements Comparable<Team>{
 	String name;
 	int score;
 	int goalsFor;
