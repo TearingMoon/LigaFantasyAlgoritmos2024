@@ -1,5 +1,9 @@
 package main;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.function.Consumer;
 
 import entities.Team;
@@ -15,14 +19,14 @@ public class MainExtreme {
 	}
 
 	public static void mainMenu() {
-		String options[] = { "Insertar Equipo", "Simulación" };
+		String options[] = { "Simulación", "Resetear datos" };
 		Consumer<Integer> actionHandler = (selection) -> {
 			switch (selection) {
-			case 1: // Insertar equipo
-				addTeamPrompt();
-				break;
-			case 2: // Simulación
+			case 1:
 				gameSimulation();
+				break;
+			case 2:
+				league.clearPuntutations();
 				break;
 			default: // Para evitar errores
 				break;
@@ -43,7 +47,27 @@ public class MainExtreme {
 		league.addTeam(newTeam);
 	}
 
+	public static void loadData() throws FileNotFoundException, IOException {
+		String name = InputManager.GetString("Introduce la ruta del archivo CSV: (Ruta completa)");
+		try (BufferedReader br = new BufferedReader(new FileReader(name))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				Team team = new Team(line, 0, 0, 0);
+				league.addTeam(team);
+			}
+		}
+
+	}
+
 	public static void gameSimulation() {
+
+		try {
+			loadData();
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			return;
+		}
+
 		DoubleLinkedCircularList<Team> teams = league.getTeams().toList();
 		DoubleLinkedCircularList<Team> auxTeams = league.getTeams().toList();
 

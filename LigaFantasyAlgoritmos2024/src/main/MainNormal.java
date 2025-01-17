@@ -14,11 +14,8 @@ public class MainNormal {
 		mainMenu();
 	}
 
-	/**
-	 * Controls the main menu of the app
-	 */
 	public static void mainMenu() {
-		String options[] = { "Insertar Equipo", "Simulación", "Resetear Datos" };
+		String options[] = { "Insertar Equipo", "Simulación", "Resetear datos" };
 		Consumer<Integer> actionHandler = (selection) -> {
 			switch (selection) {
 			case 1: // Insertar equipo
@@ -29,7 +26,6 @@ public class MainNormal {
 				break;
 			case 3:
 				league.clearPuntutations();
-				break;
 			default: // Para evitar errores
 				break;
 			}
@@ -38,7 +34,6 @@ public class MainNormal {
 	}
 
 	public static void addTeamPrompt() {
-		// TODO: Check if it works correctly
 		String name = InputManager.GetString("Introduce el nombre del equipo:");
 		if (league.teamExists(name)) {
 			System.out.println(name + " ya existe y no ha sido creado.");
@@ -50,6 +45,7 @@ public class MainNormal {
 	}
 
 	public static void gameSimulation() {
+
 		DoubleLinkedCircularList<Team> teams = league.getTeams().toList();
 		DoubleLinkedCircularList<Team> auxTeams = league.getTeams().toList();
 
