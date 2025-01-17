@@ -8,6 +8,7 @@ import structures.MergeSort;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import entities.Team;
 
@@ -39,6 +40,25 @@ public class FantasyLeague {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void addPoints(String identifier1, String identifier2, int pointsIdentifier1, int pointsIdentifier2) {
+		if (pointsIdentifier1 < pointsIdentifier2) {
+			this.addPoints(identifier2, 3);
+		} else if (pointsIdentifier1 > pointsIdentifier2) {
+			this.addPoints(identifier1, 3);
+		} else if (pointsIdentifier1 == pointsIdentifier2) {
+			this.addPoints(identifier1, 1);
+			this.addPoints(identifier2, 1);
+		}
+	}
+
+	public void addGoals(String identifier1, String identifier2, int goalsIdentifier1, int goalsIdentifier2) {
+		this.addGoalsInFavor(identifier1, goalsIdentifier1);
+		this.addGoalsInFavor(identifier2, goalsIdentifier2);
+
+		this.addGoalsAgainst(identifier1, goalsIdentifier2);
+		this.addGoalsAgainst(identifier2, goalsIdentifier1);
 	}
 
 	public void addGoalsInFavor(String identifier, int goals) {
@@ -73,12 +93,12 @@ public class FantasyLeague {
 		for (Comparable<Team> t : sortedTeams) {
 			System.out.println(t);
 		}
-		
-		if (sortedTeams.length >= 6) { //Only shows Promotions and relegations when more than 5 teams
-			
+
+		if (sortedTeams.length >= 6) { // Only shows Promotions and relegations when more than 5 teams
+
 			DoubleLinkedCircularList<String> promotions = new DoubleLinkedCircularList<String>();
 			DoubleLinkedCircularList<String> relegations = new DoubleLinkedCircularList<String>();
-			
+
 			for (int i = 0; i < sortedTeams.length; i++) {
 				if (i < 3) {
 					Team team = (Team) sortedTeams[i];
@@ -88,8 +108,8 @@ public class FantasyLeague {
 					Team team = (Team) sortedTeams[i];
 					relegations.Insert(team.getName());
 				}
-			}	
-			
+			}
+
 			System.out.println("\nAscensos: " + String.join(", ", promotions));
 			System.out.println("\nDescensos: " + String.join(", ", relegations));
 			System.out.println("");
@@ -97,6 +117,13 @@ public class FantasyLeague {
 
 	}
 
+	public void clearPuntutations() {
+		DoubleLinkedCircularList<Team> teamsList = this.teams.toList();
+		for (int i = 0; i < teamsList.GetSize(); i++) {
+			this.teams.get(teamsList.Get(i).getName()).restoreGameData();
+		}
+	}
+	
 	public boolean teamExists(String identifier) {
 		return teams.contains(identifier);
 	}
@@ -105,4 +132,8 @@ public class FantasyLeague {
 		return teams;
 	}
 
+	public static int generateGoals() {
+		Random rd = new Random();
+		return rd.nextInt(7) + 1;
+	}
 }

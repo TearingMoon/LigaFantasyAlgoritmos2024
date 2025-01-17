@@ -15,9 +15,6 @@ public class Main {
 		mainMenu();
 	}
 
-	/**
-	 * Controls the main menu of the app
-	 */
 	public static void mainMenu() {
 		String options[] = { "Insertar Equipo", "Añadir puntos de equipo", "Añadir goles a favor",
 				"Añadir goles en contra", "Ver puntuaciones" };
@@ -103,12 +100,6 @@ public class Main {
 		league.getPuntuations();
 	}
 
-	/**
-	 * THis method handles Menu loops
-	 * 
-	 * @param options
-	 * @param actions
-	 */
 	public static void handleMenu(String[] options, Consumer<Integer> actions) {
 		// Adding exit option
 		String[] optionsWithExit = new String[options.length + 1];
