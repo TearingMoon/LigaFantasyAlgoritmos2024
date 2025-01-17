@@ -63,29 +63,38 @@ public class FantasyLeague {
 				e.printStackTrace();
 			}
 		}
-	}	
+	}
 
 	public void getPuntuations() {
-		Comparable<Team> [] sortedTeams = (Comparable<Team>[]) teams.toList().ToArray(new Team[0]);
+		Comparable<Team>[] sortedTeams = (Comparable<Team>[]) teams.toList().ToArray(new Team[0]);
 		MergeSort.mergeSort(sortedTeams);
-	
-		
+
 		System.out.println("Nombre\tPuntuacion\tDiferencia de goles\n");
-		for(Comparable<Team> t : sortedTeams)
-		{
+		for (Comparable<Team> t : sortedTeams) {
 			System.out.println(t);
 		}
-		DoubleLinkedCircularList<String> promotions = new DoubleLinkedCircularList<String>();
-		DoubleLinkedCircularList<String> relegations = new DoubleLinkedCircularList<String>();
 		
-		for(int i = 0; i < teams.toList().GetSize(); i++)
-		{
-			if(i < 3) promotions.Insert(teams.toList().ToArray(new Team[0])[i].getName());
-			if(i >= teams.toList().GetSize() - 3) relegations.Insert(teams.toList().ToArray(new Team[0])[i].getName());
+		if (sortedTeams.length >= 6) { //Only shows Promotions and relegations when more than 5 teams
+			
+			DoubleLinkedCircularList<String> promotions = new DoubleLinkedCircularList<String>();
+			DoubleLinkedCircularList<String> relegations = new DoubleLinkedCircularList<String>();
+			
+			for (int i = 0; i < sortedTeams.length; i++) {
+				if (i < 3) {
+					Team team = (Team) sortedTeams[i];
+					promotions.Insert(team.getName());
+				}
+				if (i >= sortedTeams.length - 3) {
+					Team team = (Team) sortedTeams[i];
+					relegations.Insert(team.getName());
+				}
+			}	
+			
+			System.out.println("\nAscensos: " + String.join(", ", promotions));
+			System.out.println("\nDescensos: " + String.join(", ", relegations));
+			System.out.println("");
 		}
-		
-		System.out.println("\nAscensos: " + String.join(", ", promotions));
-		System.out.println("\nDescensos: " + String.join(", ", relegations));
+
 	}
 
 	public boolean teamExists(String identifier) {
@@ -96,6 +105,4 @@ public class FantasyLeague {
 		return teams;
 	}
 
-	
-	
 }
