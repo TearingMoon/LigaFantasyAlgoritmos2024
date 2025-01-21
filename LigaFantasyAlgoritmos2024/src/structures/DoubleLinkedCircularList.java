@@ -125,6 +125,14 @@ public class DoubleLinkedCircularList<T> implements Iterable<T>
 		listCount++;
 	}
 	
+	public void Insert(T... values)
+	{
+		for(T value : values)
+		{
+			Insert(value);
+		}
+	}
+	
 	public void Clear()
 	{
 		head = null;

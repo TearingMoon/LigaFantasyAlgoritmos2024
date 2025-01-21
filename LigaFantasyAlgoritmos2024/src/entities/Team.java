@@ -1,16 +1,45 @@
 package entities;
 
+import structures.DoubleLinkedCircularList;
+
 public class Team implements Comparable<Team> {
 	String name;
 	int score;
 	int goalsFor;
 	int goalsAgainst;
+	DoubleLinkedCircularList<Player> players;
+	int budget;
 
 	public Team(String name, int score, int goalsFor, int goalsAgainst) {
 		this.name = name;
 		this.score = score;
 		this.goalsFor = goalsFor;
 		this.goalsAgainst = goalsAgainst;
+		players = new DoubleLinkedCircularList<Player>();
+		budget = 0;
+	}
+	
+	public Team(String name, int score, int goalsFor, int goalsAgainst, Player[] players) throws Exception {
+		this.name = name;
+		this.score = score;
+		this.goalsFor = goalsFor;
+		this.goalsAgainst = goalsAgainst;
+		this.players = new DoubleLinkedCircularList<Player>();
+		budget = 0;
+		if (players.length != 11) throw new Exception("El equipo necesita 11 jugadores, ni mas ni menos");
+		for(Player p : players)
+		{
+			this.players.Insert(p);
+			budget += p.getCost();
+		}
+	}
+
+	public DoubleLinkedCircularList<Player> getPlayers() {
+		return players;
+	}
+	
+	public int getBudget() {
+		return budget;
 	}
 
 	public String getName() {
