@@ -134,6 +134,95 @@ public class FantasyLeague {
 
 	public static int generateGoals() {
 		Random rd = new Random();
-		return rd.nextInt(7) + 1;
+		return rd.nextInt(8);
+	}
+	
+	/**
+	 * @param Equipo local
+	 * @param Equipo visitante
+	 */
+	public static int[] simulateMatchGoals(Team team1, Team team2)
+	{
+		int[] goals = new int[2];
+		
+		int budgetDifference = Math.abs(team1.getBudget()-team2.getBudget());
+		
+		int[] probabilities;
+		int biggerTeam;
+		int smallerTeam;
+		
+		if(team1.getBudget() >= team2.getBudget()) { biggerTeam = 0; smallerTeam = 1; }
+		else { biggerTeam = 1; smallerTeam = 0; }
+		
+		if(budgetDifference > 20000000)
+		{
+			probabilities = new int[] 
+			{
+				15, // Goleada
+				50, // Victoria del grande
+				20, // Empate
+				10, // Victoria del modesto
+				5 // Sorpresa
+			};
+		}
+		else if (budgetDifference >= 5000000)
+		{
+			probabilities = new int[] 
+			{
+				10,
+				40,
+				30,
+				15,
+				5
+			};
+		}
+		else
+		{
+			probabilities = new int[] 
+			{
+				5,
+				30,
+				40,
+				20,
+				5
+			};
+		}
+		
+		Random rd = new Random();
+		int randomNum = rd.nextInt(100);
+		
+		if(randomNum < probabilities[0]) // Probabilidad acumulativa
+		{
+			// Goleada
+			goals[smallerTeam] = rd.nextInt(5); // De 0 a 4 goles
+			goals[biggerTeam] = rd.nextInt(8 - (goals[smallerTeam] + 3)) + (goals[smallerTeam] + 3); // Minimo 3 goles mas que el otro equipo y maximo 7 goles
+		}
+		else if(randomNum < probabilities[0] + probabilities[1])
+		{
+			// Victoria del grande
+			int goalsDifference = rd.nextInt(3 - 1) + 1; // Uno o dos goles de diferencia
+			goals[smallerTeam] = rd.nextInt((7-goalsDifference) + 1); // Como maximo 7 goles menos la diferencia de 1 o 2
+			goals[biggerTeam] = goals[smallerTeam] + goalsDifference;
+		}
+		else if(randomNum < probabilities[0] + probabilities[1] + probabilities[2])
+		{
+			// Empate
+			goals[biggerTeam] = goals[smallerTeam] = rd.nextInt(8);
+		}
+		else if(randomNum < probabilities[0] + probabilities[1] + probabilities[2] + probabilities[3])
+		{
+			// Victoria del humilde
+			int goalsDifference = rd.nextInt(3 - 1) + 1; // Uno o dos goles de diferencia
+			goals[biggerTeam] = rd.nextInt((7-goalsDifference) + 1); // Como maximo 7 goles menos la diferencia de 1 o 2
+			goals[smallerTeam] = goals[biggerTeam] + goalsDifference;
+		}
+		else
+		{
+			// Sorpresa
+			goals[biggerTeam] = rd.nextInt(5); // De 0 a 4 goles
+			goals[smallerTeam] = rd.nextInt(8 - (goals[biggerTeam] + 3)) + (goals[biggerTeam] + 3); // Minimo 3 goles mas que el otro equipo y maximo 7 goles
+		}
+		
+		return goals;
 	}
 }

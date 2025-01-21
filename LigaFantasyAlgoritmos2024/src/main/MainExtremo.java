@@ -3,6 +3,7 @@ package main;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,15 +12,15 @@ import java.util.function.Consumer;
 
 import entities.Player;
 import entities.Team;
-import entities.Tournament;
+import entities.Match;
 import structures.DoubleLinkedCircularList;
 import utilities.InputManager;
 
 public class MainExtremo {
 	public static FantasyLeague league;
 
-	public static void main(String[] args) {
-		
+	public static void main(String[] args)
+	{
 		Team[] teams = new Team[20];
 		try
 		{
@@ -35,6 +36,10 @@ public class MainExtremo {
 		mainMenu();
 	}
 	
+	/*
+	 * Hecho por Sergio	
+	 */
+	
 	public static Team[] loadTeamsFromCSV() throws Exception
 	{
 		DoubleLinkedCircularList<Team> teams = new DoubleLinkedCircularList<Team>();
@@ -44,7 +49,8 @@ public class MainExtremo {
 		try
 		{
 			br =new BufferedReader(new FileReader("./players.csv"));
-			String line = br.readLine();
+			String line = br.readLine(); // Nos saltamos la primera linea del CSV (encabezado)
+			line = br.readLine();
 			while (null!=line)
 			{
 				String [] fields = line.split(",");
@@ -63,7 +69,8 @@ public class MainExtremo {
 		try
 		{
 			br =new BufferedReader(new FileReader("./teams.csv"));
-			String line = br.readLine();
+			String line = br.readLine(); // Nos saltamos la primera linea del CSV (encabezado)
+			line = br.readLine();
 			int i = 0;
 			while (null!=line)
 			{
@@ -71,12 +78,14 @@ public class MainExtremo {
 				
 				Player[] playersInTeam = new Player[11];
 				
-				for(int j = 11*i, k = 0; k < 12; j++, k++)
+				for(int j = 11*i, k = 0; k < 11; j++, k++)
 				{
-					
+					playersInTeam[k] = players.Get(j);
 				}
 				
 				Team team = new Team(fields[0], 0, 0, 0, playersInTeam);
+				
+				teams.Insert(team);
 				
 				line = br.readLine();
 				i++;
@@ -108,33 +117,22 @@ public class MainExtremo {
 		handleMenu(options, actionHandler);
 	}
 
-	public static void addTeamPrompt() {
-		// TODO: Check if it works correctly
-		String name = InputManager.GetString("Introduce el nombre del equipo:");
-		if (league.teamExists(name)) {
-			System.out.println(name + " ya existe y no ha sido creado.");
-			return;
-		}
-		;
-		Team newTeam = new Team(name, 0, 0, 0);
-		league.addTeam(newTeam);
-	}
-
 	/**
 	 * LO HA HECHO DAVID!!! (asistencia de escritura(- David: "Y revision de codigo") por emilly) :) <3
 	 */
 	public static void gameSimulation() {
 		DoubleLinkedCircularList<Team> teams = league.getTeams().toList();
 		DoubleLinkedCircularList<Team> auxTeams = league.getTeams().toList();
-		List<Tournament> tournament1 = new ArrayList<Tournament>();
-		List<Tournament> tournament2 = new ArrayList<Tournament>();
+		List<Match> tournament1 = new ArrayList<Match>();
+		List<Match> tournament2 = new ArrayList<Match>();
 		
 		for (int i = 0; i < teams.GetSize(); i++) {
 			auxTeams.Remove(teams.Get(i));
 			for (int j = 0; j < auxTeams.GetSize(); j++) {
-				int goalsTeam1 = FantasyLeague.generateGoals();
-				int goalsTeam2 = FantasyLeague.generateGoals();
-				Tournament t = new Tournament(teams.Get(i), auxTeams.Get(j), FantasyLeague.generateGoals(), FantasyLeague.generateGoals());
+				int[] goals = FantasyLeague.simulateMatchGoals(teams.Get(i), auxTeams.Get(j));
+				int goalsTeam1 = goals[0];
+				int goalsTeam2 = goals[1];
+				Match t = new Match(teams.Get(i), auxTeams.Get(j), goalsTeam1, goalsTeam2);
 				tournament1.add(t);
 				// Goals
 				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
@@ -144,17 +142,18 @@ public class MainExtremo {
 		}
 		Collections.shuffle(tournament1);
 		System.out.println("Primera Vuelta: ");
-		for (Tournament tour : tournament1) {			
-			System.out.println(tour);
+		for (Match match : tournament1) {			
+			System.out.println(match);
 		}
 		
 		auxTeams = league.getTeams().toList();
 		for (int i = 0; i < teams.GetSize(); i++) {
 			auxTeams.Remove(teams.Get(i));
 			for (int j = 0; j < auxTeams.GetSize(); j++) {
-				int goalsTeam1 = FantasyLeague.generateGoals();
-				int goalsTeam2 = FantasyLeague.generateGoals();
-				Tournament t = new Tournament(teams.Get(i), auxTeams.Get(j), FantasyLeague.generateGoals(), FantasyLeague.generateGoals());
+				int[] goals = FantasyLeague.simulateMatchGoals(teams.Get(i), auxTeams.Get(j));
+				int goalsTeam1 = goals[0];
+				int goalsTeam2 = goals[1];
+				Match t = new Match(teams.Get(i), auxTeams.Get(j), goalsTeam1, goalsTeam2);
 				tournament2.add(t);
 				// Goals
 				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
@@ -169,25 +168,25 @@ public class MainExtremo {
 		}
 		
 		System.out.println("Segunda Vuelta: ");
-		for (Tournament tour : tournament2) {			
+		for (Match tour : tournament2) {			
 			System.out.println(tour);
 		}
-		
+		System.out.println();
 		league.getPuntuations();
 	}
 	
 	/**
 	 * LO HA HECHO DAVID!!! (asistencia de escritura(- David: "Y revision de codigo") por emilly) :) <3
 	 */
-	public static boolean isSameSequence(List<Tournament> tour1, List<Tournament> tour2) {
+	public static boolean isSameSequence(List<Match> tour1, List<Match> tour2) {
 		return tour1.equals(tour2);
 	}
 	
 	/**
 	 * LO HA HECHO DAVID!!! (asistencia de escritura(- David: "Y revision de codigo") por emilly) :) <3
 	 */
-	public static boolean isInverse(List<Tournament> tour1, List<Tournament> tour2) {
-		List<Tournament> listInverseTour = new ArrayList<Tournament>(tour2);
+	public static boolean isInverse(List<Match> tour1, List<Match> tour2) {
+		List<Match> listInverseTour = new ArrayList<Match>(tour2);
 		Collections.reverse(listInverseTour);
 		return tour1.equals(listInverseTour);
 	}
@@ -207,7 +206,7 @@ public class MainExtremo {
 			optionsWithExit[i] = options[i];
 		}
 
-		// Enetering the loop
+		// Entering the loop
 		while (true) {
 			int selection = InputManager.MultipleOptions("Selecciona una opción:", optionsWithExit);
 			actions.accept(selection);

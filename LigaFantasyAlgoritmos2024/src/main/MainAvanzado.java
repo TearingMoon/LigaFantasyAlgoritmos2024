@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import entities.Team;
-import entities.Tournament;
+import entities.Match;
 import structures.DoubleLinkedCircularList;
 import utilities.InputManager;
 
@@ -57,15 +57,15 @@ public class MainAvanzado {
 	public static void gameSimulation() {
 		DoubleLinkedCircularList<Team> teams = league.getTeams().toList();
 		DoubleLinkedCircularList<Team> auxTeams = league.getTeams().toList();
-		List<Tournament> tournament1 = new ArrayList<Tournament>();
-		List<Tournament> tournament2 = new ArrayList<Tournament>();
+		List<Match> tournament1 = new ArrayList<Match>();
+		List<Match> tournament2 = new ArrayList<Match>();
 		
 		for (int i = 0; i < teams.GetSize(); i++) {
 			auxTeams.Remove(teams.Get(i));
 			for (int j = 0; j < auxTeams.GetSize(); j++) {
 				int goalsTeam1 = FantasyLeague.generateGoals();
 				int goalsTeam2 = FantasyLeague.generateGoals();
-				Tournament t = new Tournament(teams.Get(i), auxTeams.Get(j), FantasyLeague.generateGoals(), FantasyLeague.generateGoals());
+				Match t = new Match(teams.Get(i), auxTeams.Get(j), goalsTeam1, goalsTeam2);
 				tournament1.add(t);
 				// Goals
 				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
@@ -75,8 +75,8 @@ public class MainAvanzado {
 		}
 		Collections.shuffle(tournament1);
 		System.out.println("Primera Vuelta: ");
-		for (Tournament tour : tournament1) {			
-			System.out.println(tour);
+		for (Match match : tournament1) {			
+			System.out.println(match);
 		}
 		
 		auxTeams = league.getTeams().toList();
@@ -85,7 +85,7 @@ public class MainAvanzado {
 			for (int j = 0; j < auxTeams.GetSize(); j++) {
 				int goalsTeam1 = FantasyLeague.generateGoals();
 				int goalsTeam2 = FantasyLeague.generateGoals();
-				Tournament t = new Tournament(teams.Get(i), auxTeams.Get(j), FantasyLeague.generateGoals(), FantasyLeague.generateGoals());
+				Match t = new Match(teams.Get(i), auxTeams.Get(j), goalsTeam1, goalsTeam2);
 				tournament2.add(t);
 				// Goals
 				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
@@ -100,7 +100,7 @@ public class MainAvanzado {
 		}
 		
 		System.out.println("Segunda Vuelta: ");
-		for (Tournament tour : tournament2) {			
+		for (Match tour : tournament2) {			
 			System.out.println(tour);
 		}
 		
@@ -110,15 +110,15 @@ public class MainAvanzado {
 	/**
 	 * LO HA HECHO DAVID!!! (asistencia de escritura(- David: "Y revision de codigo") por emilly) :) <3
 	 */
-	public static boolean isSameSequence(List<Tournament> tour1, List<Tournament> tour2) {
+	public static boolean isSameSequence(List<Match> tour1, List<Match> tour2) {
 		return tour1.equals(tour2);
 	}
 	
 	/**
 	 * LO HA HECHO DAVID!!! (asistencia de escritura(- David: "Y revision de codigo") por emilly) :) <3
 	 */
-	public static boolean isInverse(List<Tournament> tour1, List<Tournament> tour2) {
-		List<Tournament> listInverseTour = new ArrayList<Tournament>(tour2);
+	public static boolean isInverse(List<Match> tour1, List<Match> tour2) {
+		List<Match> listInverseTour = new ArrayList<Match>(tour2);
 		Collections.reverse(listInverseTour);
 		return tour1.equals(listInverseTour);
 	}

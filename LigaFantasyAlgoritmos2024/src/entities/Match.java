@@ -1,12 +1,12 @@
 package entities;
 
-public class Tournament {
+public class Match {
 	private Team team1;
 	private Team team2;
 	private int goalsTeam1;
 	private int goalsTeam2;
 
-	public Tournament(Team team1, Team team2, int goalsTeam1, int goalsTeam2) {
+	public Match(Team team1, Team team2, int goalsTeam1, int goalsTeam2) {
 		this.team1 = team1;
 		this.team2 = team2;
 		this.goalsTeam1 = goalsTeam1;
@@ -67,15 +67,14 @@ public class Tournament {
 			return false;
 		}
 
-		Tournament t = (Tournament) obj;
+		Match t = (Match) obj;
 
 		return team1.equals(t.team1) && team2.equals(t.team2);
 	}
 
 	@Override
 	public String toString() {
-		return "Tournament [team1=" + team1 + ", team2=" + team2 + ", goalsTeam1=" + goalsTeam1 + ", goalsTeam2="
-				+ goalsTeam2 + "]";
+		return "Partido [" + team1.getName() + " " + goalsTeam1 + " VS " + goalsTeam2 + " " + team2.getName() + "]";
 	}
 
 }
