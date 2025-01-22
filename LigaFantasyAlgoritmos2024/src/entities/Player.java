@@ -82,4 +82,50 @@ public class Player
 	public void setCost(int cost) {
 		this.cost = cost;
 	}
+
+	@Override
+	public String toString()
+	{
+		String s = "";
+		
+		switch(position)
+		{
+		case Position.Portero:
+			s += "POR:";
+			break;
+		case Position.Lateral_Izdo:
+			s += "LAT_IZQ:";
+			break;
+		case Position.Lateral_Dcho:
+			s += "LAT_DER:";
+			break;
+		case Position.Central:
+			s += "CEN:";
+			break;
+		case Position.Pivote:
+			s += "PIV:";
+			break;
+		case Position.Mediocentro:
+			s += "MED_CEN:";
+			break;
+		case Position.Mediapunta:
+			s += "MED_PUN:";
+			break;
+		case Position.Extremo_Izdo:
+			s += "EXT_IZD:";
+			break;
+		case Position.Extremo_Dcho:
+			s += "EXT_DER:";
+			break;
+		case Position.Delantero:
+			s += "DEL:";
+			break;
+		default:
+			s += "NO_POS:";
+			break;
+		}
+		s += " [ " + name + " (" + age +  ") ]";
+		
+		return s;
+	}
 }

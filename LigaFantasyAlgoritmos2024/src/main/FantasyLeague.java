@@ -59,6 +59,54 @@ public class FantasyLeague {
 
 		this.addGoalsAgainst(identifier1, goalsIdentifier2);
 		this.addGoalsAgainst(identifier2, goalsIdentifier1);
+		
+		if (goalsIdentifier1 > goalsIdentifier2)
+		{
+			Team winningTeam = teams.get(identifier1);
+			Team loosingTeam = teams.get(identifier2);
+			
+			winningTeam.setWinStreak(winningTeam.getWinStreak()+1);
+			if (loosingTeam.getWinStreak() > loosingTeam.getHighestWinStreak()) loosingTeam.setHighestWinStreak(loosingTeam.getWinStreak());
+			loosingTeam.setWinStreak(0);
+			
+			loosingTeam.setLoseStreak(loosingTeam.getLoseStreak()+1);
+			if (winningTeam.getLoseStreak() > winningTeam.getHighestLoseStreak()) winningTeam.setHighestLoseStreak(winningTeam.getLoseStreak());
+			winningTeam.setLoseStreak(0);
+			
+			winningTeam.setNumberOfWinsAsLocal(winningTeam.getNumberOfWinsAsLocal()+1);
+			loosingTeam.setNumberOfLosesAsVisitant(loosingTeam.getNumberOfLosesAsVisitant()+1);
+		}
+		else if (goalsIdentifier1 < goalsIdentifier2)
+		{
+			Team winningTeam = teams.get(identifier2);
+			Team loosingTeam = teams.get(identifier1);
+			
+			winningTeam.setWinStreak(winningTeam.getWinStreak()+1);
+			if (loosingTeam.getWinStreak() > loosingTeam.getHighestWinStreak()) loosingTeam.setHighestWinStreak(loosingTeam.getWinStreak());
+			loosingTeam.setWinStreak(0);
+			
+			loosingTeam.setLoseStreak(loosingTeam.getLoseStreak()+1);
+			if (winningTeam.getLoseStreak() > winningTeam.getHighestLoseStreak()) winningTeam.setHighestLoseStreak(winningTeam.getLoseStreak());
+			winningTeam.setLoseStreak(0);
+			
+			winningTeam.setNumberOfWinsAsVisitant(winningTeam.getNumberOfWinsAsVisitant()+1);
+			loosingTeam.setNumberOfLosesAsLocal(loosingTeam.getNumberOfLosesAsLocal()+1);
+		}
+		else
+		{
+			if (teams.get(identifier2).getWinStreak() > teams.get(identifier2).getHighestWinStreak()) teams.get(identifier2).setHighestWinStreak(teams.get(identifier2).getWinStreak());
+			teams.get(identifier2).setWinStreak(0);
+			if (teams.get(identifier2).getLoseStreak() > teams.get(identifier2).getHighestLoseStreak()) teams.get(identifier2).setHighestLoseStreak(teams.get(identifier2).getLoseStreak());
+			teams.get(identifier2).setWinStreak(0);
+			
+			if (teams.get(identifier1).getWinStreak() > teams.get(identifier1).getHighestWinStreak()) teams.get(identifier1).setHighestWinStreak(teams.get(identifier1).getWinStreak());
+			teams.get(identifier1).setWinStreak(0);
+			if (teams.get(identifier1).getLoseStreak() > teams.get(identifier1).getHighestLoseStreak()) teams.get(identifier1).setHighestLoseStreak(teams.get(identifier1).getLoseStreak());
+			teams.get(identifier1).setWinStreak(0);
+			
+			teams.get(identifier1).setNumberOfTies(teams.get(identifier1).getNumberOfTies()+1);
+			teams.get(identifier2).setNumberOfTies(teams.get(identifier2).getNumberOfTies()+1);
+		}
 	}
 
 	public void addGoalsInFavor(String identifier, int goals) {
@@ -88,8 +136,10 @@ public class FantasyLeague {
 	public void getPuntuations() {
 		Comparable<Team>[] sortedTeams = (Comparable<Team>[]) teams.toList().ToArray(new Team[0]);
 		MergeSort.mergeSort(sortedTeams);
-
-		System.out.println("Nombre\tPuntuacion\tDiferencia de goles\n");
+		
+		System.out.println("Resultados:");
+		System.out.println();
+		System.out.println("Nombre\t\t\tPuntuacion\tDiferencia de goles\n");
 		for (Comparable<Team> t : sortedTeams) {
 			System.out.println(t);
 		}
@@ -125,6 +175,47 @@ public class FantasyLeague {
 		 * - Mejor racha de victorias
 		 * - Peor racha de derrotas
 		 */
+		
+		DoubleLinkedCircularList<Team> teamsList = this.teams.toList();
+		Team mostGoalsForTeam = teamsList.Get(0);
+		Team mostGoalsAgainstTeam = teamsList.Get(0);
+		Team highestWinStreakTeam = teamsList.Get(0);
+		Team highestLoseStreakTeam = teamsList.Get(0);
+		Team highestGoalDifferenceTeam = teamsList.Get(0);
+		Team lowestGoalDifferenceTeam = teamsList.Get(0);
+		Team mostWinsAsLocalTeam = teamsList.Get(0);
+		Team mostWinsAsVisitantTeam = teamsList.Get(0);
+		Team mostLosesAsLocalTeam = teamsList.Get(0);
+		Team mostLosesAsVisitantTeam = teamsList.Get(0);
+		
+		for(Team t : teamsList)
+		{
+			if(t.getGoalsFor() > mostGoalsForTeam.getGoalsFor()) mostGoalsForTeam = t;
+			if(t.getGoalsAgainst() > mostGoalsAgainstTeam.getGoalsAgainst()) mostGoalsAgainstTeam = t;
+			if(t.getHighestWinStreak() > highestWinStreakTeam.getHighestWinStreak()) highestWinStreakTeam = t;
+			if(t.getHighestLoseStreak() > highestLoseStreakTeam.getHighestLoseStreak()) highestLoseStreakTeam = t;
+			if(t.getNumberOfWinsAsLocal() > mostWinsAsLocalTeam.getNumberOfWinsAsLocal()) mostWinsAsLocalTeam = t;
+			if(t.getNumberOfWinsAsVisitant() > mostWinsAsVisitantTeam.getNumberOfWinsAsVisitant()) mostWinsAsVisitantTeam = t;
+			if(t.getNumberOfLosesAsLocal() > mostLosesAsLocalTeam.getNumberOfLosesAsLocal()) mostLosesAsLocalTeam = t;
+			if(t.getNumberOfLosesAsVisitant() > mostLosesAsVisitantTeam.getNumberOfLosesAsVisitant()) mostLosesAsVisitantTeam = t;
+			if(t.getGoalsDifference() > highestGoalDifferenceTeam.getGoalsDifference()) highestGoalDifferenceTeam = t;
+			if(t.getGoalsDifference() < lowestGoalDifferenceTeam.getGoalsDifference()) lowestGoalDifferenceTeam = t;
+		}
+		
+		System.out.println("Estadísticas:\n");
+		
+		System.out.println("Equipo con mas goles a favor: " + mostGoalsForTeam.getName());
+		System.out.println("Equipo con mas goles en contra: " + mostGoalsAgainstTeam.getName());
+		System.out.println("Equipo con mayor diferencia de goles: " + highestGoalDifferenceTeam.getName());
+		System.out.println("Equipo con menor diferencia de goles: " + lowestGoalDifferenceTeam.getName());
+		
+		System.out.println("Equipo con mayor racha de victorias: " + highestWinStreakTeam.getName());
+		System.out.println("Equipo con mayor racha de derrotas: " + highestLoseStreakTeam.getName());
+		
+		System.out.println("Equipo con mas victorias como local: " + mostWinsAsLocalTeam.getName());
+		System.out.println("Equipo con mas victorias como visitante: " + mostWinsAsVisitantTeam.getName());
+		System.out.println("Equipo con mas derrotas como local: " + mostLosesAsLocalTeam.getName());
+		System.out.println("Equipo con mas derrotas como visitante: " + mostLosesAsVisitantTeam.getName());
 	}
 
 	public void clearPuntutations() {

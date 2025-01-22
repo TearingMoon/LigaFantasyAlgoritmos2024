@@ -129,7 +129,24 @@ public class DoubleLinkedCircularList<T> implements Iterable<T>
 	{
 		for(T value : values)
 		{
-			Insert(value);
+			if(listCount != 0)
+			{
+				DoubleNode<T> newLast = new DoubleNode<T>(value);
+				DoubleNode<T> last = head.GetPrevious();
+				
+				last.SetNext(newLast);
+				newLast.SetPrevious(last);
+				newLast.SetNext(head);
+				head.SetPrevious(newLast);
+			}
+			else
+			{
+				head = new DoubleNode<T>(value);
+				head.SetPrevious(head);
+				head.SetNext(head);
+			}
+			
+			listCount++;
 		}
 	}
 	

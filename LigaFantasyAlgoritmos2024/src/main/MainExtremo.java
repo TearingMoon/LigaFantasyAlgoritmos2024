@@ -102,14 +102,14 @@ public class MainExtremo {
 	}
 
 	public static void mainMenu() {
-		String options[] = {"Simulación", "Resetear datos" };
+		String options[] = {"Simulación", "Ver equipos"};
 		Consumer<Integer> actionHandler = (selection) -> {
 			switch (selection) {
 			case 1:
 				gameSimulation();
 				break;
 			case 2:
-				league.clearPuntutations();
+				listTeams();
 				break;
 			default: // Para evitar errores
 				break;
@@ -133,8 +133,8 @@ public class MainExtremo {
 				int[] goals = FantasyLeague.simulateMatchGoals(teams.Get(i), auxTeams.Get(j));
 				int goalsTeam1 = goals[0];
 				int goalsTeam2 = goals[1];
-				Match t = new Match(teams.Get(i), auxTeams.Get(j), goalsTeam1, goalsTeam2);
-				tournament1.Insert(t);
+				Match m = new Match(teams.Get(i), auxTeams.Get(j), goalsTeam1, goalsTeam2);
+				tournament1.Insert(m);
 				// Goals
 				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
 				// Points
@@ -146,16 +146,15 @@ public class MainExtremo {
 		for (int i = 0; i < teams.GetSize(); i++) {
 			auxTeams.Remove(teams.Get(i));
 			for (int j = 0; j < auxTeams.GetSize(); j++) {
-				int[] goals = FantasyLeague.simulateMatchGoals(teams.Get(i), auxTeams.Get(j));
+				int[] goals = FantasyLeague.simulateMatchGoals(auxTeams.Get(j), teams.Get(i));
 				int goalsTeam1 = goals[0];
 				int goalsTeam2 = goals[1];
-				Match t = new Match(auxTeams.Get(j), teams.Get(i), goalsTeam1, goalsTeam2);
-				tournament2.Insert(t);
+				Match m = new Match(auxTeams.Get(j), teams.Get(i), goalsTeam1, goalsTeam2);
+				tournament2.Insert(m);
 				// Goals
-				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
+				league.addGoals(auxTeams.Get(j).getName(), teams.Get(i).getName(), goalsTeam1, goalsTeam2);
 				// Points
-				league.addPoints(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
-
+				league.addPoints(auxTeams.Get(j).getName(), teams.Get(i).getName(), goalsTeam1, goalsTeam2);
 			}
 		}
 		
@@ -207,11 +206,11 @@ public class MainExtremo {
 						
 						suitedMatchesAux = suitedMatches;
 						suitedMatches = suitedMatchesAux.FindAll(
-								Match -> 
-								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
-							);
+							Match -> 
+							teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+						);
 						
-						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 					}
 					
 					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -237,7 +236,7 @@ public class MainExtremo {
 								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
 							);
 							
-							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 						}
 						
 						if (teamsWhoPlayedInHome.GetSize() > 0)
@@ -246,11 +245,11 @@ public class MainExtremo {
 							
 							suitedMatchesAux = suitedMatches;
 							suitedMatches = suitedMatchesAux.FindAll(
-									Match -> 
-									teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
-								);
+								Match -> 
+								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+							);
 							
-							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 						}
 						
 						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -277,7 +276,7 @@ public class MainExtremo {
 								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
 							);
 							
-							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 						}
 						
 						if (teamsWhoPlayedInHome.GetSize() > 0)
@@ -286,11 +285,11 @@ public class MainExtremo {
 							
 							suitedMatchesAux = suitedMatches;
 							suitedMatches = suitedMatchesAux.FindAll(
-									Match -> 
-									teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
-								);
+								Match -> 
+								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+							);
 							
-							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 						}
 						
 						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -314,7 +313,7 @@ public class MainExtremo {
 							teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
 						);
 						
-						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 					}
 					
 					if (teamsWhoPlayedInHome.GetSize() > 0)
@@ -323,11 +322,11 @@ public class MainExtremo {
 						
 						suitedMatchesAux = suitedMatches;
 						suitedMatches = suitedMatchesAux.FindAll(
-								Match -> 
-								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
-							);
+							Match -> 
+							teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+						);
 						
-						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 					}
 					
 					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -385,11 +384,11 @@ public class MainExtremo {
 						
 						suitedMatchesAux = suitedMatches;
 						suitedMatches = suitedMatchesAux.FindAll(
-								Match -> 
-								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
-							);
+							Match -> 
+							teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+						);
 						
-						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 					}
 					
 					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -415,7 +414,7 @@ public class MainExtremo {
 								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
 							);
 							
-							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 						}
 						
 						if (teamsWhoPlayedInHome.GetSize() > 0)
@@ -424,11 +423,11 @@ public class MainExtremo {
 							
 							suitedMatchesAux = suitedMatches;
 							suitedMatches = suitedMatchesAux.FindAll(
-									Match -> 
-									teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
-								);
+								Match -> 
+								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+							);
 							
-							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 						}
 						
 						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -455,7 +454,7 @@ public class MainExtremo {
 								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
 							);
 							
-							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 						}
 						
 						if (teamsWhoPlayedInHome.GetSize() > 0)
@@ -464,11 +463,11 @@ public class MainExtremo {
 							
 							suitedMatchesAux = suitedMatches;
 							suitedMatches = suitedMatchesAux.FindAll(
-									Match -> 
-									teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
-								);
+								Match -> 
+								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+							);
 							
-							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 						}
 						
 						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -492,7 +491,7 @@ public class MainExtremo {
 							teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
 						);
 						
-						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 					}
 					
 					if (teamsWhoPlayedInHome.GetSize() > 0)
@@ -501,11 +500,11 @@ public class MainExtremo {
 						
 						suitedMatchesAux = suitedMatches;
 						suitedMatches = suitedMatchesAux.FindAll(
-								Match -> 
-								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
-							);
+							Match -> 
+							teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+						);
 						
-						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
 					}
 					
 					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -527,6 +526,25 @@ public class MainExtremo {
 		
 		System.out.println();
 		league.getPuntuations();
+		league.getStatistics();
+		league.clearPuntutations();
+		System.out.println();
+	}
+	
+	public static void listTeams()
+	{
+		for(Team t : league.getTeams().toList())
+		{
+			System.out.println(t.getName());
+			System.out.println("Presupuesto: " + t.getBudget()/1000000 + "M (€)");
+			System.out.println("Alineacion:");
+			
+			for(Player p : t.getPlayers())
+			{
+				System.out.println(p);
+			}
+			System.out.println();
+		}
 	}
 
 	public static void handleMenu(String[] options, Consumer<Integer> actions) {

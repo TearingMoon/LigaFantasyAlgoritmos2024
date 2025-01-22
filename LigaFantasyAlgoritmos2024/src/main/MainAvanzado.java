@@ -88,9 +88,9 @@ public class MainAvanzado {
 				Match t = new Match(auxTeams.Get(j), teams.Get(i), goalsTeam1, goalsTeam2);
 				tournament2.add(t);
 				// Goals
-				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
+				league.addGoals(auxTeams.Get(j).getName(), teams.Get(i).getName(), goalsTeam1, goalsTeam2);
 				// Points
-				league.addPoints(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
+				league.addPoints(auxTeams.Get(j).getName(), teams.Get(i).getName(), goalsTeam1, goalsTeam2);
 
 			}
 		}
@@ -104,7 +104,10 @@ public class MainAvanzado {
 			System.out.println(tour);
 		}
 		
+		System.out.println();
 		league.getPuntuations();
+		System.out.println();
+		league.getStatistics();
 	}
 	
 	/**
@@ -121,13 +124,6 @@ public class MainAvanzado {
 		List<Match> listInverseTour = new ArrayList<Match>(tour2);
 		Collections.reverse(listInverseTour);
 		return tour1.equals(listInverseTour);
-	}
-	
-	/**
-	 * LO HA HECHO DAVID!!! (asistencia de escritura(- David: "Y revision de codigo") por emilly) :) <3
-	 */
-	public static void generateSequence() {
-		
 	}
 
 	public static void handleMenu(String[] options, Consumer<Integer> actions) {
