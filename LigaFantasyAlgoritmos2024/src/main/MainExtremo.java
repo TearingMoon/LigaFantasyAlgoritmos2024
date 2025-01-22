@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 
 import entities.Player;
@@ -123,8 +124,8 @@ public class MainExtremo {
 	public static void gameSimulation() {
 		DoubleLinkedCircularList<Team> teams = league.getTeams().toList();
 		DoubleLinkedCircularList<Team> auxTeams = league.getTeams().toList();
-		List<Match> tournament1 = new ArrayList<Match>();
-		List<Match> tournament2 = new ArrayList<Match>();
+		DoubleLinkedCircularList<Match> tournament1 = new DoubleLinkedCircularList<Match>();
+		DoubleLinkedCircularList<Match> tournament2 = new DoubleLinkedCircularList<Match>();
 		
 		for (int i = 0; i < teams.GetSize(); i++) {
 			auxTeams.Remove(teams.Get(i));
@@ -133,17 +134,12 @@ public class MainExtremo {
 				int goalsTeam1 = goals[0];
 				int goalsTeam2 = goals[1];
 				Match t = new Match(teams.Get(i), auxTeams.Get(j), goalsTeam1, goalsTeam2);
-				tournament1.add(t);
+				tournament1.Insert(t);
 				// Goals
 				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
 				// Points
 				league.addPoints(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
 			}
-		}
-		Collections.shuffle(tournament1);
-		System.out.println("Primera Vuelta: ");
-		for (Match match : tournament1) {			
-			System.out.println(match);
 		}
 		
 		auxTeams = league.getTeams().toList();
@@ -153,8 +149,8 @@ public class MainExtremo {
 				int[] goals = FantasyLeague.simulateMatchGoals(teams.Get(i), auxTeams.Get(j));
 				int goalsTeam1 = goals[0];
 				int goalsTeam2 = goals[1];
-				Match t = new Match(teams.Get(i), auxTeams.Get(j), goalsTeam1, goalsTeam2);
-				tournament2.add(t);
+				Match t = new Match(auxTeams.Get(j), teams.Get(i), goalsTeam1, goalsTeam2);
+				tournament2.Insert(t);
 				// Goals
 				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
 				// Points
@@ -163,39 +159,374 @@ public class MainExtremo {
 			}
 		}
 		
-		while (isSameSequence(tournament1, tournament2) || isInverse(tournament1, tournament2)) {
-			Collections.shuffle(tournament2);
+		/*
+		 * Hecho por Sergio con ayuda de Iker
+		 */
+		
+		Random rd = new Random();
+		
+		Team team1Sunday = null, team2Sunday = null;
+		DoubleLinkedCircularList<Team> teamsWhoPlayedInHome = new DoubleLinkedCircularList<Team>();
+		DoubleLinkedCircularList<Team> teamsWhoPlayedInHomeAux = new DoubleLinkedCircularList<Team>();
+		DoubleLinkedCircularList<Team> teamsWhoPlayed = new DoubleLinkedCircularList<Team>();
+		
+		System.out.println("Primera vuelta:");
+		for (int i = 0; i < 19; i++) //jornadas vuelta 1
+		{
+			System.out.println("\nJornada " + (i+1) + ":");
+			for (int j = 0; j < 4; j++)
+			{
+				Match matchOfTheDay;
+				DoubleLinkedCircularList<Match> suitedMatches = tournament1;
+				DoubleLinkedCircularList<Match> suitedMatchesAux;
+				switch(j)
+				{
+				case 0:
+					System.out.println("Jueves:");	
+					
+					if (team1Sunday != null && team2Sunday != null)
+					{
+						final var team1S = team1Sunday;
+						final var team2S = team2Sunday;
+						
+						suitedMatchesAux = suitedMatches;
+						suitedMatches = suitedMatchesAux.FindAll(
+							Match -> 
+							!Match.getTeam1().getName().equals(team1S.getName()) &&
+							!Match.getTeam1().getName().equals(team2S.getName()) &&
+							!Match.getTeam2().getName().equals(team1S.getName()) &&
+							!Match.getTeam2().getName().equals(team2S.getName())
+						);
+						
+						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+					}
+					
+					if (teamsWhoPlayedInHome.GetSize() > 0)
+					{
+						final var teamsHome = teamsWhoPlayedInHome;
+						
+						suitedMatchesAux = suitedMatches;
+						suitedMatches = suitedMatchesAux.FindAll(
+								Match -> 
+								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							);
+						
+						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+					}
+					
+					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
+					
+					teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
+					teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+					tournament1.Remove(matchOfTheDay);
+					System.out.println(matchOfTheDay);
+					break;
+				case 1:
+					System.out.println("Viernes:");
+					
+					for (int k = 0; k < 4; k++)
+					{
+						suitedMatches = tournament1;
+						if (teamsWhoPlayed.GetSize() > 0)
+						{
+							final var teamsPlayed = teamsWhoPlayed;
+							
+							suitedMatchesAux = suitedMatches;
+							suitedMatches = suitedMatchesAux.FindAll(
+								Match -> 
+								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							);
+							
+							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						}
+						
+						if (teamsWhoPlayedInHome.GetSize() > 0)
+						{
+							final var teamsHome = teamsWhoPlayedInHome;
+							
+							suitedMatchesAux = suitedMatches;
+							suitedMatches = suitedMatchesAux.FindAll(
+									Match -> 
+									teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+								);
+							
+							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						}
+						
+						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
+						
+						teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
+						teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+						tournament1.Remove(matchOfTheDay);
+						System.out.println(matchOfTheDay);
+					}
+					break;
+				case 2:
+					System.out.println("Sabado:");
+					
+					for (int k = 0; k < 4; k++)
+					{
+						suitedMatches = tournament1;
+						if (teamsWhoPlayed.GetSize() > 0)
+						{
+							final var teamsPlayed = teamsWhoPlayed;
+							
+							suitedMatchesAux = suitedMatches;
+							suitedMatches = suitedMatchesAux.FindAll(
+								Match -> 
+								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							);
+							
+							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						}
+						
+						if (teamsWhoPlayedInHome.GetSize() > 0)
+						{
+							final var teamsHome = teamsWhoPlayedInHome;
+							
+							suitedMatchesAux = suitedMatches;
+							suitedMatches = suitedMatchesAux.FindAll(
+									Match -> 
+									teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+								);
+							
+							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						}
+						
+						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
+						
+						teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
+						teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+						tournament1.Remove(matchOfTheDay);
+						System.out.println(matchOfTheDay);
+					}
+					break;
+				case 3:
+					System.out.println("Domingo:");
+					
+					if (teamsWhoPlayed.GetSize() > 0)
+					{
+						final var teamsPlayed = teamsWhoPlayed;
+						
+						suitedMatchesAux = suitedMatches;
+						suitedMatches = suitedMatchesAux.FindAll(
+							Match -> 
+							teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+						);
+						
+						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+					}
+					
+					if (teamsWhoPlayedInHome.GetSize() > 0)
+					{
+						final var teamsHome = teamsWhoPlayedInHome;
+						
+						suitedMatchesAux = suitedMatches;
+						suitedMatches = suitedMatchesAux.FindAll(
+								Match -> 
+								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							);
+						
+						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+					}
+					
+					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
+					
+					team1Sunday = matchOfTheDay.getTeam1();
+					team2Sunday = matchOfTheDay.getTeam2();
+					teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+					tournament1.Remove(matchOfTheDay);
+					System.out.println(matchOfTheDay);
+					break;
+				default:
+					break;
+				}
+			}
+			teamsWhoPlayed.Clear();
+			teamsWhoPlayedInHome = teamsWhoPlayedInHomeAux;
+			teamsWhoPlayedInHomeAux.Clear();
 		}
 		
-		System.out.println("Segunda Vuelta: ");
-		for (Match tour : tournament2) {			
-			System.out.println(tour);
+		System.out.println();
+		System.out.println("Segunda vuelta:");
+		for (int i = 19; i<38; i++) //jornadas vuelta 2
+		{
+			System.out.println("\nJornada " + (i+1) + ":");
+			for (int j = 0; j < 4; j++)
+			{
+				Match matchOfTheDay;
+				DoubleLinkedCircularList<Match> suitedMatches = tournament2;
+				DoubleLinkedCircularList<Match> suitedMatchesAux;
+				switch(j)
+				{
+				case 0:
+					System.out.println("Jueves:");	
+					
+					if (team1Sunday != null && team2Sunday != null)
+					{
+						final var team1S = team1Sunday;
+						final var team2S = team2Sunday;
+						
+						suitedMatchesAux = suitedMatches;
+						suitedMatches = suitedMatchesAux.FindAll(
+							Match -> 
+							!Match.getTeam1().getName().equals(team1S.getName()) &&
+							!Match.getTeam1().getName().equals(team2S.getName()) &&
+							!Match.getTeam2().getName().equals(team1S.getName()) &&
+							!Match.getTeam2().getName().equals(team2S.getName())
+						);
+						
+						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+					}
+					
+					if (teamsWhoPlayedInHome.GetSize() > 0)
+					{
+						final var teamsHome = teamsWhoPlayedInHome;
+						
+						suitedMatchesAux = suitedMatches;
+						suitedMatches = suitedMatchesAux.FindAll(
+								Match -> 
+								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							);
+						
+						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+					}
+					
+					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
+					
+					teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
+					teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+					tournament2.Remove(matchOfTheDay);
+					System.out.println(matchOfTheDay);
+					break;
+				case 1:
+					System.out.println("Viernes:");
+					
+					for (int k = 0; k < 4; k++)
+					{
+						suitedMatches = tournament2;
+						if (teamsWhoPlayed.GetSize() > 0)
+						{
+							final var teamsPlayed = teamsWhoPlayed;
+							
+							suitedMatchesAux = suitedMatches;
+							suitedMatches = suitedMatchesAux.FindAll(
+								Match -> 
+								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							);
+							
+							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						}
+						
+						if (teamsWhoPlayedInHome.GetSize() > 0)
+						{
+							final var teamsHome = teamsWhoPlayedInHome;
+							
+							suitedMatchesAux = suitedMatches;
+							suitedMatches = suitedMatchesAux.FindAll(
+									Match -> 
+									teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+								);
+							
+							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						}
+						
+						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
+						
+						teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
+						teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+						tournament2.Remove(matchOfTheDay);
+						System.out.println(matchOfTheDay);
+					}
+					break;
+				case 2:
+					System.out.println("Sabado:");
+					
+					for (int k = 0; k < 4; k++)
+					{
+						suitedMatches = tournament2;
+						if (teamsWhoPlayed.GetSize() > 0)
+						{
+							final var teamsPlayed = teamsWhoPlayed;
+							
+							suitedMatchesAux = suitedMatches;
+							suitedMatches = suitedMatchesAux.FindAll(
+								Match -> 
+								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							);
+							
+							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						}
+						
+						if (teamsWhoPlayedInHome.GetSize() > 0)
+						{
+							final var teamsHome = teamsWhoPlayedInHome;
+							
+							suitedMatchesAux = suitedMatches;
+							suitedMatches = suitedMatchesAux.FindAll(
+									Match -> 
+									teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+								);
+							
+							if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						}
+						
+						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
+						
+						teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
+						teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+						tournament2.Remove(matchOfTheDay);
+						System.out.println(matchOfTheDay);
+					}
+					break;
+				case 3:
+					System.out.println("Domingo:");
+					
+					if (teamsWhoPlayed.GetSize() > 0)
+					{
+						final var teamsPlayed = teamsWhoPlayed;
+						
+						suitedMatchesAux = suitedMatches;
+						suitedMatches = suitedMatchesAux.FindAll(
+							Match -> 
+							teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+						);
+						
+						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+					}
+					
+					if (teamsWhoPlayedInHome.GetSize() > 0)
+					{
+						final var teamsHome = teamsWhoPlayedInHome;
+						
+						suitedMatchesAux = suitedMatches;
+						suitedMatches = suitedMatchesAux.FindAll(
+								Match -> 
+								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							);
+						
+						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+					}
+					
+					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
+					
+					team1Sunday = matchOfTheDay.getTeam1();
+					team2Sunday = matchOfTheDay.getTeam2();
+					teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+					tournament2.Remove(matchOfTheDay);
+					System.out.println(matchOfTheDay);
+					break;
+				default:
+					break;
+				}
+			}
+			teamsWhoPlayed.Clear();
+			teamsWhoPlayedInHome = teamsWhoPlayedInHomeAux;
+			teamsWhoPlayedInHomeAux.Clear();
 		}
+		
 		System.out.println();
 		league.getPuntuations();
-	}
-	
-	/**
-	 * LO HA HECHO DAVID!!! (asistencia de escritura(- David: "Y revision de codigo") por emilly) :) <3
-	 */
-	public static boolean isSameSequence(List<Match> tour1, List<Match> tour2) {
-		return tour1.equals(tour2);
-	}
-	
-	/**
-	 * LO HA HECHO DAVID!!! (asistencia de escritura(- David: "Y revision de codigo") por emilly) :) <3
-	 */
-	public static boolean isInverse(List<Match> tour1, List<Match> tour2) {
-		List<Match> listInverseTour = new ArrayList<Match>(tour2);
-		Collections.reverse(listInverseTour);
-		return tour1.equals(listInverseTour);
-	}
-	
-	/**
-	 * LO HA HECHO DAVID!!! (asistencia de escritura(- David: "Y revision de codigo") por emilly) :) <3
-	 */
-	public static void generateSequence() {
-		
 	}
 
 	public static void handleMenu(String[] options, Consumer<Integer> actions) {

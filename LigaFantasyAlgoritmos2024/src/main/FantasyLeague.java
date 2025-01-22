@@ -116,6 +116,16 @@ public class FantasyLeague {
 		}
 
 	}
+	
+	public void getStatistics()
+	{
+		/* TODO: Las siguientes estadisticas
+		 * - Equipo con mayor numero de goles
+		 * - Equipo con mayor numero de goles en contra
+		 * - Mejor racha de victorias
+		 * - Peor racha de derrotas
+		 */
+	}
 
 	public void clearPuntutations() {
 		DoubleLinkedCircularList<Team> teamsList = this.teams.toList();

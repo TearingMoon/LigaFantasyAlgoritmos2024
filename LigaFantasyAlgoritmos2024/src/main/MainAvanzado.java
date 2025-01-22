@@ -85,7 +85,7 @@ public class MainAvanzado {
 			for (int j = 0; j < auxTeams.GetSize(); j++) {
 				int goalsTeam1 = FantasyLeague.generateGoals();
 				int goalsTeam2 = FantasyLeague.generateGoals();
-				Match t = new Match(teams.Get(i), auxTeams.Get(j), goalsTeam1, goalsTeam2);
+				Match t = new Match(auxTeams.Get(j), teams.Get(i), goalsTeam1, goalsTeam2);
 				tournament2.add(t);
 				// Goals
 				league.addGoals(teams.Get(i).getName(), auxTeams.Get(j).getName(), goalsTeam1, goalsTeam2);
