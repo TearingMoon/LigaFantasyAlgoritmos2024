@@ -204,18 +204,18 @@ public class FantasyLeague {
 		
 		System.out.println("Estadísticas:\n");
 		
-		System.out.println("Equipo con mas goles a favor: " + mostGoalsForTeam.getName());
-		System.out.println("Equipo con mas goles en contra: " + mostGoalsAgainstTeam.getName());
-		System.out.println("Equipo con mayor diferencia de goles: " + highestGoalDifferenceTeam.getName());
-		System.out.println("Equipo con menor diferencia de goles: " + lowestGoalDifferenceTeam.getName());
+		System.out.println("Equipo con mas goles a favor: " + mostGoalsForTeam.getName() + " (" + mostGoalsForTeam.getGoalsFor() + " goles)");
+		System.out.println("Equipo con mas goles en contra: " + mostGoalsAgainstTeam.getName() + " (" + mostGoalsAgainstTeam.getGoalsAgainst() + " goles)");
+		System.out.println("Equipo con mayor diferencia de goles: " + highestGoalDifferenceTeam.getName() + " (" + highestGoalDifferenceTeam.getGoalsDifference() + " goles)");
+		System.out.println("Equipo con menor diferencia de goles: " + lowestGoalDifferenceTeam.getName() + " (" + lowestGoalDifferenceTeam.getGoalsDifference() + " goles)");
 		
-		System.out.println("Equipo con mayor racha de victorias: " + highestWinStreakTeam.getName());
-		System.out.println("Equipo con mayor racha de derrotas: " + highestLoseStreakTeam.getName());
+		System.out.println("Equipo con mayor racha de victorias: " + highestWinStreakTeam.getName() + " (" + highestWinStreakTeam.getHighestWinStreak() + " victorias)");
+		System.out.println("Equipo con mayor racha de derrotas: " + highestLoseStreakTeam.getName() + " (" + highestLoseStreakTeam.getHighestLoseStreak() + " derrotas)");
 		
-		System.out.println("Equipo con mas victorias como local: " + mostWinsAsLocalTeam.getName());
-		System.out.println("Equipo con mas victorias como visitante: " + mostWinsAsVisitantTeam.getName());
-		System.out.println("Equipo con mas derrotas como local: " + mostLosesAsLocalTeam.getName());
-		System.out.println("Equipo con mas derrotas como visitante: " + mostLosesAsVisitantTeam.getName());
+		System.out.println("Equipo con mas victorias como local: " + mostWinsAsLocalTeam.getName() + " (" + mostWinsAsLocalTeam.getNumberOfWinsAsLocal() + " victorias)");
+		System.out.println("Equipo con mas victorias como visitante: " + mostWinsAsVisitantTeam.getName() + " (" + mostWinsAsVisitantTeam.getNumberOfWinsAsVisitant() + " victorias)");
+		System.out.println("Equipo con mas derrotas como local: " + mostLosesAsLocalTeam.getName() + " (" + mostLosesAsLocalTeam.getNumberOfLosesAsLocal() + " derrotas)");
+		System.out.println("Equipo con mas derrotas como visitante: " + mostLosesAsVisitantTeam.getName() + " (" + mostLosesAsVisitantTeam.getNumberOfLosesAsVisitant() + " derrotas)");
 	}
 
 	public void clearPuntutations() {
