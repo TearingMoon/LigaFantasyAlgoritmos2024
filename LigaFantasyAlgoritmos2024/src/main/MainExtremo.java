@@ -166,7 +166,9 @@ public class MainExtremo {
 		
 		Team team1Sunday = null, team2Sunday = null;
 		DoubleLinkedCircularList<Team> teamsWhoPlayedInHome = new DoubleLinkedCircularList<Team>();
+		DoubleLinkedCircularList<Team> teamsWhoPlayedAway = new DoubleLinkedCircularList<Team>();
 		DoubleLinkedCircularList<Team> teamsWhoPlayedInHomeAux = new DoubleLinkedCircularList<Team>();
+		DoubleLinkedCircularList<Team> teamsWhoPlayedAwayAux = new DoubleLinkedCircularList<Team>();
 		DoubleLinkedCircularList<Team> teamsWhoPlayed = new DoubleLinkedCircularList<Team>();
 		
 		System.out.println("Primera vuelta:");
@@ -176,7 +178,7 @@ public class MainExtremo {
 			for (int j = 0; j < 4; j++)
 			{
 				Match matchOfTheDay;
-				DoubleLinkedCircularList<Match> suitedMatches = tournament1;
+				DoubleLinkedCircularList<Match> suitedMatches = tournament1.Copy();
 				DoubleLinkedCircularList<Match> suitedMatchesAux;
 				switch(j)
 				{
@@ -188,7 +190,7 @@ public class MainExtremo {
 						final var team1S = team1Sunday;
 						final var team2S = team2Sunday;
 						
-						suitedMatchesAux = suitedMatches;
+						suitedMatchesAux = suitedMatches.Copy();
 						suitedMatches = suitedMatchesAux.FindAll(
 							Match -> 
 							!Match.getTeam1().getName().equals(team1S.getName()) &&
@@ -197,26 +199,29 @@ public class MainExtremo {
 							!Match.getTeam2().getName().equals(team2S.getName())
 						);
 						
-						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 					}
 					
 					if (teamsWhoPlayedInHome.GetSize() > 0)
 					{
-						final var teamsHome = teamsWhoPlayedInHome;
+						final var teamsHome = teamsWhoPlayedInHome.Copy();
+						final var teamsAway = teamsWhoPlayedAway.Copy();
 						
-						suitedMatchesAux = suitedMatches;
+						suitedMatchesAux = suitedMatches.Copy();
 						suitedMatches = suitedMatchesAux.FindAll(
 							Match -> 
-							teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+							teamsHome.IndexOf(Match.getTeam1()) == -1 &&
+							teamsAway.IndexOf(Match.getTeam2()) == -1
 						);
 						
-						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 					}
 					
 					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
 					
 					teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
 					teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+					teamsWhoPlayedAwayAux.Insert(matchOfTheDay.getTeam2());
 					tournament1.Remove(matchOfTheDay);
 					System.out.println(matchOfTheDay);
 					break;
@@ -225,37 +230,41 @@ public class MainExtremo {
 					
 					for (int k = 0; k < 4; k++)
 					{
-						suitedMatches = tournament1;
+						suitedMatches = tournament1.Copy();
 						if (teamsWhoPlayed.GetSize() > 0)
 						{
-							final var teamsPlayed = teamsWhoPlayed;
+							final var teamsPlayed = teamsWhoPlayed.Copy();
 							
-							suitedMatchesAux = suitedMatches;
+							suitedMatchesAux = suitedMatches.Copy();
 							suitedMatches = suitedMatchesAux.FindAll(
 								Match -> 
-								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+								teamsPlayed.IndexOf(Match.getTeam1()) == -1 &&
+								teamsPlayed.IndexOf(Match.getTeam2()) == -1
 							);
 							
-							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 						}
 						
 						if (teamsWhoPlayedInHome.GetSize() > 0)
 						{
-							final var teamsHome = teamsWhoPlayedInHome;
+							final var teamsHome = teamsWhoPlayedInHome.Copy();
+							final var teamsAway = teamsWhoPlayedAway.Copy();
 							
-							suitedMatchesAux = suitedMatches;
+							suitedMatchesAux = suitedMatches.Copy();
 							suitedMatches = suitedMatchesAux.FindAll(
 								Match -> 
-								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+								teamsHome.IndexOf(Match.getTeam1()) == -1 &&
+								teamsAway.IndexOf(Match.getTeam2()) == -1
 							);
 							
-							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 						}
 						
 						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
 						
 						teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
 						teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+						teamsWhoPlayedAwayAux.Insert(matchOfTheDay.getTeam2());
 						tournament1.Remove(matchOfTheDay);
 						System.out.println(matchOfTheDay);
 					}
@@ -265,37 +274,41 @@ public class MainExtremo {
 					
 					for (int k = 0; k < 4; k++)
 					{
-						suitedMatches = tournament1;
+						suitedMatches = tournament1.Copy();
 						if (teamsWhoPlayed.GetSize() > 0)
 						{
-							final var teamsPlayed = teamsWhoPlayed;
+							final var teamsPlayed = teamsWhoPlayed.Copy();
 							
-							suitedMatchesAux = suitedMatches;
+							suitedMatchesAux = suitedMatches.Copy();
 							suitedMatches = suitedMatchesAux.FindAll(
 								Match -> 
-								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+								teamsPlayed.IndexOf(Match.getTeam1()) == -1 &&
+								teamsPlayed.IndexOf(Match.getTeam2()) == -1
 							);
 							
-							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 						}
 						
 						if (teamsWhoPlayedInHome.GetSize() > 0)
 						{
-							final var teamsHome = teamsWhoPlayedInHome;
+							final var teamsHome = teamsWhoPlayedInHome.Copy();
+							final var teamsAway = teamsWhoPlayedAway.Copy();
 							
-							suitedMatchesAux = suitedMatches;
+							suitedMatchesAux = suitedMatches.Copy();
 							suitedMatches = suitedMatchesAux.FindAll(
 								Match -> 
-								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+								teamsHome.IndexOf(Match.getTeam1()) == -1 &&
+								teamsAway.IndexOf(Match.getTeam2()) == -1
 							);
 							
-							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 						}
 						
 						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
 						
 						teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
 						teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+						teamsWhoPlayedAwayAux.Insert(matchOfTheDay.getTeam2());
 						tournament1.Remove(matchOfTheDay);
 						System.out.println(matchOfTheDay);
 					}
@@ -305,28 +318,31 @@ public class MainExtremo {
 					
 					if (teamsWhoPlayed.GetSize() > 0)
 					{
-						final var teamsPlayed = teamsWhoPlayed;
+						final var teamsPlayed = teamsWhoPlayed.Copy();
 						
-						suitedMatchesAux = suitedMatches;
+						suitedMatchesAux = suitedMatches.Copy();
 						suitedMatches = suitedMatchesAux.FindAll(
 							Match -> 
-							teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							teamsPlayed.IndexOf(Match.getTeam1()) == -1 &&
+							teamsPlayed.IndexOf(Match.getTeam2()) == -1
 						);
 						
-						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 					}
 					
 					if (teamsWhoPlayedInHome.GetSize() > 0)
 					{
-						final var teamsHome = teamsWhoPlayedInHome;
+						final var teamsHome = teamsWhoPlayedInHome.Copy();
+						final var teamsAway = teamsWhoPlayedAway.Copy();
 						
-						suitedMatchesAux = suitedMatches;
+						suitedMatchesAux = suitedMatches.Copy();
 						suitedMatches = suitedMatchesAux.FindAll(
 							Match -> 
-							teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+							teamsHome.IndexOf(Match.getTeam1()) == -1 &&
+							teamsAway.IndexOf(Match.getTeam2()) == -1
 						);
 						
-						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 					}
 					
 					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -334,6 +350,7 @@ public class MainExtremo {
 					team1Sunday = matchOfTheDay.getTeam1();
 					team2Sunday = matchOfTheDay.getTeam2();
 					teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+					teamsWhoPlayedAwayAux.Insert(matchOfTheDay.getTeam2());
 					tournament1.Remove(matchOfTheDay);
 					System.out.println(matchOfTheDay);
 					break;
@@ -342,8 +359,10 @@ public class MainExtremo {
 				}
 			}
 			teamsWhoPlayed.Clear();
-			teamsWhoPlayedInHome = teamsWhoPlayedInHomeAux;
+			teamsWhoPlayedInHome = teamsWhoPlayedInHomeAux.Copy();
+			teamsWhoPlayedAway = teamsWhoPlayedAwayAux.Copy();
 			teamsWhoPlayedInHomeAux.Clear();
+			teamsWhoPlayedAwayAux.Clear();
 		}
 		
 		System.out.println();
@@ -354,7 +373,7 @@ public class MainExtremo {
 			for (int j = 0; j < 4; j++)
 			{
 				Match matchOfTheDay;
-				DoubleLinkedCircularList<Match> suitedMatches = tournament2;
+				DoubleLinkedCircularList<Match> suitedMatches = tournament2.Copy();
 				DoubleLinkedCircularList<Match> suitedMatchesAux;
 				switch(j)
 				{
@@ -366,7 +385,7 @@ public class MainExtremo {
 						final var team1S = team1Sunday;
 						final var team2S = team2Sunday;
 						
-						suitedMatchesAux = suitedMatches;
+						suitedMatchesAux = suitedMatches.Copy();
 						suitedMatches = suitedMatchesAux.FindAll(
 							Match -> 
 							!Match.getTeam1().getName().equals(team1S.getName()) &&
@@ -375,26 +394,29 @@ public class MainExtremo {
 							!Match.getTeam2().getName().equals(team2S.getName())
 						);
 						
-						if (suitedMatches.GetSize() == 0) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 					}
 					
 					if (teamsWhoPlayedInHome.GetSize() > 0)
 					{
-						final var teamsHome = teamsWhoPlayedInHome;
+						final var teamsHome = teamsWhoPlayedInHome.Copy();
+						final var teamsAway = teamsWhoPlayedAway.Copy();
 						
-						suitedMatchesAux = suitedMatches;
+						suitedMatchesAux = suitedMatches.Copy();
 						suitedMatches = suitedMatchesAux.FindAll(
 							Match -> 
-							teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+							teamsHome.IndexOf(Match.getTeam1()) == -1 &&
+							teamsAway.IndexOf(Match.getTeam2()) == -1
 						);
 						
-						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 					}
 					
 					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
 					
 					teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
 					teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+					teamsWhoPlayedAwayAux.Insert(matchOfTheDay.getTeam2());
 					tournament2.Remove(matchOfTheDay);
 					System.out.println(matchOfTheDay);
 					break;
@@ -403,37 +425,41 @@ public class MainExtremo {
 					
 					for (int k = 0; k < 4; k++)
 					{
-						suitedMatches = tournament2;
+						suitedMatches = tournament2.Copy();
 						if (teamsWhoPlayed.GetSize() > 0)
 						{
-							final var teamsPlayed = teamsWhoPlayed;
+							final var teamsPlayed = teamsWhoPlayed.Copy();
 							
-							suitedMatchesAux = suitedMatches;
+							suitedMatchesAux = suitedMatches.Copy();
 							suitedMatches = suitedMatchesAux.FindAll(
 								Match -> 
-								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+								teamsPlayed.IndexOf(Match.getTeam1()) == -1 &&
+								teamsPlayed.IndexOf(Match.getTeam2()) == -1
 							);
 							
-							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 						}
 						
 						if (teamsWhoPlayedInHome.GetSize() > 0)
 						{
-							final var teamsHome = teamsWhoPlayedInHome;
+							final var teamsHome = teamsWhoPlayedInHome.Copy();
+							final var teamsAway = teamsWhoPlayedAway.Copy();
 							
-							suitedMatchesAux = suitedMatches;
+							suitedMatchesAux = suitedMatches.Copy();
 							suitedMatches = suitedMatchesAux.FindAll(
 								Match -> 
-								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+								teamsHome.IndexOf(Match.getTeam1()) == -1 &&
+								teamsAway.IndexOf(Match.getTeam2()) == -1
 							);
 							
-							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 						}
 						
 						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
 						
 						teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
 						teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+						teamsWhoPlayedAwayAux.Insert(matchOfTheDay.getTeam2());
 						tournament2.Remove(matchOfTheDay);
 						System.out.println(matchOfTheDay);
 					}
@@ -443,37 +469,41 @@ public class MainExtremo {
 					
 					for (int k = 0; k < 4; k++)
 					{
-						suitedMatches = tournament2;
+						suitedMatches = tournament2.Copy();
 						if (teamsWhoPlayed.GetSize() > 0)
 						{
-							final var teamsPlayed = teamsWhoPlayed;
+							final var teamsPlayed = teamsWhoPlayed.Copy();
 							
-							suitedMatchesAux = suitedMatches;
+							suitedMatchesAux = suitedMatches.Copy();
 							suitedMatches = suitedMatchesAux.FindAll(
 								Match -> 
-								teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+								teamsPlayed.IndexOf(Match.getTeam1()) == -1 &&
+								teamsPlayed.IndexOf(Match.getTeam2()) == -1
 							);
 							
-							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 						}
 						
 						if (teamsWhoPlayedInHome.GetSize() > 0)
 						{
-							final var teamsHome = teamsWhoPlayedInHome;
+							final var teamsHome = teamsWhoPlayedInHome.Copy();
+							final var teamsAway = teamsWhoPlayedAway.Copy();
 							
-							suitedMatchesAux = suitedMatches;
+							suitedMatchesAux = suitedMatches.Copy();
 							suitedMatches = suitedMatchesAux.FindAll(
 								Match -> 
-								teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+								teamsHome.IndexOf(Match.getTeam1()) == -1 &&
+								teamsAway.IndexOf(Match.getTeam2()) == -1
 							);
 							
-							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+							if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 						}
 						
 						matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
 						
 						teamsWhoPlayed.Insert(matchOfTheDay.getTeam1(), matchOfTheDay.getTeam2());
 						teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+						teamsWhoPlayedAwayAux.Insert(matchOfTheDay.getTeam2());
 						tournament2.Remove(matchOfTheDay);
 						System.out.println(matchOfTheDay);
 					}
@@ -483,28 +513,31 @@ public class MainExtremo {
 					
 					if (teamsWhoPlayed.GetSize() > 0)
 					{
-						final var teamsPlayed = teamsWhoPlayed;
+						final var teamsPlayed = teamsWhoPlayed.Copy();
 						
-						suitedMatchesAux = suitedMatches;
+						suitedMatchesAux = suitedMatches.Copy();
 						suitedMatches = suitedMatchesAux.FindAll(
 							Match -> 
-							teamsPlayed.Find(Team -> Team.getName().equals(Match.getTeam1().getName()) || Team.getName().equals(Match.getTeam2().getName())) == null
+							teamsPlayed.IndexOf(Match.getTeam1()) == -1 &&
+							teamsPlayed.IndexOf(Match.getTeam2()) == -1
 						);
 						
-						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 					}
 					
 					if (teamsWhoPlayedInHome.GetSize() > 0)
 					{
-						final var teamsHome = teamsWhoPlayedInHome;
+						final var teamsHome = teamsWhoPlayedInHome.Copy();
+						final var teamsAway = teamsWhoPlayedAway.Copy();
 						
-						suitedMatchesAux = suitedMatches;
+						suitedMatchesAux = suitedMatches.Copy();
 						suitedMatches = suitedMatchesAux.FindAll(
 							Match -> 
-							teamsHome.Find(Team -> Team.getName().equals(Match.getTeam1().getName())) == null
+							teamsHome.IndexOf(Match.getTeam1()) == -1 &&
+							teamsAway.IndexOf(Match.getTeam2()) == -1
 						);
 						
-						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux;
+						if (suitedMatches.IsEmpty()) suitedMatches = suitedMatchesAux.Copy();
 					}
 					
 					matchOfTheDay = suitedMatches.Get(rd.nextInt(suitedMatches.GetSize()));
@@ -512,6 +545,7 @@ public class MainExtremo {
 					team1Sunday = matchOfTheDay.getTeam1();
 					team2Sunday = matchOfTheDay.getTeam2();
 					teamsWhoPlayedInHomeAux.Insert(matchOfTheDay.getTeam1());
+					teamsWhoPlayedAwayAux.Insert(matchOfTheDay.getTeam2());
 					tournament2.Remove(matchOfTheDay);
 					System.out.println(matchOfTheDay);
 					break;
@@ -520,8 +554,10 @@ public class MainExtremo {
 				}
 			}
 			teamsWhoPlayed.Clear();
-			teamsWhoPlayedInHome = teamsWhoPlayedInHomeAux;
+			teamsWhoPlayedInHome = teamsWhoPlayedInHomeAux.Copy();
+			teamsWhoPlayedAway = teamsWhoPlayedAwayAux.Copy();
 			teamsWhoPlayedInHomeAux.Clear();
+			teamsWhoPlayedAwayAux.Clear();
 		}
 		
 		System.out.println();

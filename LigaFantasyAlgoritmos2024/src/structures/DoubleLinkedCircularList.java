@@ -3,7 +3,7 @@ package structures;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class DoubleLinkedCircularList<T> implements Iterable<T> 
+public class DoubleLinkedCircularList<T> implements Iterable<T>
 {
 	private DoubleNode<T> head;
 	private int listCount;
@@ -365,6 +365,15 @@ public class DoubleLinkedCircularList<T> implements Iterable<T>
 		}
 		
 		return returnList;
+	}
+	
+	public DoubleLinkedCircularList<T> Copy()
+	{
+		DoubleLinkedCircularList<T> copy = new DoubleLinkedCircularList<T>();
+		
+		for(T item : this) copy.Insert(item);
+		
+		return copy;
 	}
 	
 	@SuppressWarnings("unchecked")
